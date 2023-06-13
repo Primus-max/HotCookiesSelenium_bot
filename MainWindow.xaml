@@ -9,88 +9,85 @@
     <Grid>
         <Border Padding="20">
             <StackPanel>
-                <!--Поле для ввода количества пройденных циклов-->
+                <!-- Поле для ввода количества пройденных циклов -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Сколько раз повторить цикл:"/>
-                    <TextBox
-                        MinWidth="40"
-                        Margin="40 0 0 0"/>
+                    <TextBox x:Name="repeatCountTextBox"
+                             MinWidth="40"
+                             Margin="40 0 0 0"/>
                 </StackPanel>
 
-                <!--Поле для поисковых запросов-->
+                <!-- Поле для поисковых запросов -->
                 <StackPanel  Margin="0 20 0 20">
                     <TextBlock Text="Поисковые запросы. Вводите через запятую."
                                Margin="0 0 0 10"/>
-                    <RichTextBox
-                        Height="240"
-                        VerticalScrollBarVisibility="Auto"/>
+                    <RichTextBox x:Name="searchQueriesTextBox"
+                                 Height="240"
+                                 VerticalScrollBarVisibility="Auto"/>
                 </StackPanel>
 
-                <!--Поле для ввода рандомного выбора колличества поисковых запросов-->
+                <!-- Поле для ввода рандомного выбора количества поисковых запросов -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Сколько запросов"
                                Margin="0 0 10 0"/>
                     <TextBlock Text="От:"/>
-                    <TextBox
-                        MinWidth="40"
-                        Margin="5 0 0 0" />
+                    <TextBox x:Name="minSearchCountTextBox"
+                             MinWidth="40"
+                             Margin="5 0 0 0" />
 
                     <TextBlock Text="До:" Margin="20 0 0 0"/>
-                    <TextBox
-                        MinWidth="40"
-                        Margin="5 0 0 0" />
+                    <TextBox x:Name="maxSearchCountTextBox"
+                             MinWidth="40"
+                             Margin="5 0 0 0" />
                 </StackPanel>
 
-                <!--Поле для ввода рандомного выбора колличества поседенных сайтов по одному запросу-->
+                <!-- Поле для ввода рандомного выбора количества посещенных сайтов по одному запросу -->
                 <StackPanel Orientation="Horizontal"
                             Margin="0 20 0 0">
-                    <TextBlock Text="Сколько посетить сйтов"
+                    <TextBlock Text="Сколько посетить сайтов"
                                Margin="0 0 10 0"/>
                     <TextBlock Text="От:"/>
-                    <TextBox
-                        MinWidth="40"
-                        Margin="5 0 0 0" />
+                    <TextBox x:Name="minSiteVisitCountTextBox"
+                             MinWidth="40"
+                             Margin="5 0 0 0" />
 
                     <TextBlock Text="До:" Margin="20 0 0 0"/>
-                    <TextBox
-                        MinWidth="40"
-                        Margin="5 0 0 0" />
+                    <TextBox x:Name="maxSiteVisitCountTextBox"
+                             MinWidth="40"
+                             Margin="5 0 0 0" />
                 </StackPanel>
 
-                <!--Поле для ввода рандомного выбора колличества времени проведённого на сайтах-->
+                <!-- Поле для ввода рандомного выбора количества времени, проведенного на сайтах -->
                 <StackPanel Orientation="Horizontal"
                             Margin="0 20 0 0">
                     <TextBlock Text="Сколько провести времени"
                                Margin="0 0 10 0"/>
                     <TextBlock Text="От:"/>
-                    <TextBox
-                        MinWidth="20"
-                        Margin="5 0 0 0" />
-                    <TextBlock
-                        Text="сек"
-                        Margin="5 0 0 0"/>
+                    <TextBox x:Name="minTimeSpentTextBox"
+                             MinWidth="20"
+                             Margin="5 0 0 0" />
+                    <TextBlock Text="сек"
+                               Margin="5 0 0 0"/>
 
-                    <TextBlock
-                        Text="До:"
-                        Margin="20 0 0 0"/>
-                    <TextBox
-                        MinWidth="20"
-                        Margin="5 0 0 0" />
-                    <TextBlock
-                        Text="сек"
-                        Margin="5 0 0 0"/>
+                    <TextBlock Text="До:"
+                               Margin="20 0 0 0"/>
+                    <TextBox x:Name="maxTimeSpentTextBox"
+                             MinWidth="20"
+                             Margin="5 0 0 0" />
+                    <TextBlock Text="сек"
+                               Margin="5 0 0 0"/>
                 </StackPanel>
 
-                <!--Поле для ввода имени группы профилей-->
+                <!-- Поле для ввода имени группы профилей -->
                 <StackPanel Orientation="Horizontal"
                             Margin="0 20 0 0">
                     <TextBlock Text="Имя группы профилей:"/>
-                    <TextBox
-                        MinWidth="160"
-                        Margin="40 0 0 0"/>
+                    <TextBox x:Name="profileGroupNameTextBox"
+                             MinWidth="160"
+                             Margin="40 0 0 0"/>
                 </StackPanel>
             </StackPanel>
         </Border>
-
     </Grid>
+
 </Window>
