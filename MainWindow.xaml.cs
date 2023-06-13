@@ -54,7 +54,7 @@ namespace HotCookies
             // Запись JSON-строки в файл
             File.WriteAllText("config.json", json);
 
-            var remoteDriver = await BrowserManager.ConnectDriver("j75liy3");
+            var remoteDriver = await BrowserManager.ConnectBrowser("j75liy3");
             //string groupName = await GetGroupList();
         }
 
