@@ -56,6 +56,30 @@
                         MinWidth="40"
                         Margin="5 0 0 0" />
                 </StackPanel>
+
+                <!--Поле для ввода рандомного выбора колличества времени проведённого на сайтах-->
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 20 0 0">
+                    <TextBlock Text="Сколько провести времени"
+                               Margin="0 0 10 0"/>
+                    <TextBlock Text="От:"/>
+                    <TextBox
+                        MinWidth="20"
+                        Margin="5 0 0 0" />
+                    <TextBlock
+                        Text="сек"
+                        Margin="5 0 0 0"/>
+
+                    <TextBlock
+                        Text="До:"
+                        Margin="20 0 0 0"/>
+                    <TextBox
+                        MinWidth="20"
+                        Margin="5 0 0 0" />
+                    <TextBlock
+                        Text="сек"
+                        Margin="5 0 0 0"/>
+                </StackPanel>
             </StackPanel>
         </Border>
 
