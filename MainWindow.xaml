@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotCookies"
         mc:Ignorable="d"
-        Title="Прогреваем куки" Height="600" Width="400">
+        Title="Прогреваем куки" 
+        Height="600"
+        Width="400">
     <Grid>
         <Border Padding="20">
             <StackPanel>
@@ -86,6 +88,11 @@
                              MinWidth="160"
                              Margin="40 0 0 0"/>
                 </StackPanel>
+
+                <Button
+                    Margin="0 30 0 0"
+                    Content="Запустить"
+                    Click="RunButton_Click"/>
             </StackPanel>
         </Border>
     </Grid>
