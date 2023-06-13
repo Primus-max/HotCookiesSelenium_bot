@@ -80,6 +80,15 @@
                         Text="сек"
                         Margin="5 0 0 0"/>
                 </StackPanel>
+
+                <!--Поле для ввода имени группы профилей-->
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 20 0 0">
+                    <TextBlock Text="Имя группы профилей:"/>
+                    <TextBox
+                        MinWidth="160"
+                        Margin="40 0 0 0"/>
+                </StackPanel>
             </StackPanel>
         </Border>
 
