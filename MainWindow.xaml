@@ -28,16 +28,30 @@
                     <TextBlock Text="Сколько запросов"
                                Margin="0 0 10 0"/>
                     <TextBlock Text="От:"/>
-                    <TextBox x:Name="fromTextBox"
-                             MinWidth="40"
-                             Margin="5 0 0 0" />
+                    <TextBox
+                        MinWidth="40"
+                        Margin="5 0 0 0" />
 
                     <TextBlock Text="До:" Margin="20 0 0 0"/>
-                    <TextBox x:Name="toTextBox"
-                             MinWidth="40"
-                             Margin="5 0 0 0" />
+                    <TextBox
+                        MinWidth="40"
+                        Margin="5 0 0 0" />
                 </StackPanel>
 
+                <StackPanel Orientation="Horizontal"
+                            Margin="0 20 0 0">
+                    <TextBlock Text="Сколько посетить сйтов"
+                               Margin="0 0 10 0"/>
+                    <TextBlock Text="От:"/>
+                    <TextBox
+                        MinWidth="40"
+                        Margin="5 0 0 0" />
+
+                    <TextBlock Text="До:" Margin="20 0 0 0"/>
+                    <TextBox
+                        MinWidth="40"
+                        Margin="5 0 0 0" />
+                </StackPanel>
             </StackPanel>
         </Border>
 
