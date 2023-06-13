@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace HotCookies
             LoadConfiguration();
         }
 
-        private void RunButton_Click(object sender, RoutedEventArgs e)
+        private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
             bool IsCkeckMaxValue = CheckMaxCountSerachQuery();
             if (!IsCkeckMaxValue) return;
@@ -52,6 +53,9 @@ namespace HotCookies
 
             // Запись JSON-строки в файл
             File.WriteAllText("config.json", json);
+
+            var remoteDriver = await BrowserManager.ConnectDriver("j75liy3");
+            //string groupName = await GetGroupList();
         }
 
         private void LoadConfiguration()
@@ -130,6 +134,39 @@ namespace HotCookies
                 }
             }
             return true;
+        }
+
+        private async Task<string> GetGroupList()
+        {
+            string apiUrl = $"http://local.adspower.com:50325/api/v1/user/list";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string result = await response.Content.ReadAsStringAsync();
+                        return result;
+                    }
+                    else
+                    {
+                        // Обработка ошибки при запросе к API
+                        string errorMessage = $"Error: {response.StatusCode}";
+                        // Можно выполнить дополнительные действия по обработке ошибки
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Обработка исключения при выполнении запроса
+                string errorMessage = $"Exception: {ex.Message}";
+                // Можно выполнить дополнительные действия по обработке исключения
+                return null;
+            }
         }
     }
 }
