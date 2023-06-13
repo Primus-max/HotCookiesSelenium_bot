@@ -5,8 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotCookies"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="400">
+        Title="Прогреваем куки" Height="600" Width="400">
     <Grid>
+        <Border Padding="20">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Сколько раз повторить цикл:"/>
+                    <TextBox
+                        MinWidth="40"
+                        Margin="40 0 0 0"/>
+                </StackPanel>
+
+                <StackPanel  Margin="0 20 0 20">
+                    <TextBlock Text="Поисковые запросы. Вводите через запятую."
+                               Margin="0 0 0 10"/>
+                    <RichTextBox
+                        Height="240"
+                        VerticalScrollBarVisibility="Auto"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Сколько запросов"
+                               Margin="0 0 10 0"/>
+                    <TextBlock Text="От:"/>
+                    <TextBox x:Name="fromTextBox"
+                             MinWidth="40"
+                             Margin="5 0 0 0" />
+
+                    <TextBlock Text="До:" Margin="20 0 0 0"/>
+                    <TextBox x:Name="toTextBox"
+                             MinWidth="40"
+                             Margin="5 0 0 0" />
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
 
     </Grid>
 </Window>
