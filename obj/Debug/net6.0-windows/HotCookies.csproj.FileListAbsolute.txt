@@ -19,3 +19,10 @@ Z:\Programming\ProjectC#\HotCookies\obj\Debug\net6.0-windows\refint\HotCookies.d
 Z:\Programming\ProjectC#\HotCookies\obj\Debug\net6.0-windows\HotCookies.pdb
 Z:\Programming\ProjectC#\HotCookies\obj\Debug\net6.0-windows\HotCookies.genruntimeconfig.cache
 Z:\Programming\ProjectC#\HotCookies\obj\Debug\net6.0-windows\ref\HotCookies.dll
+Z:\Programming\ProjectC#\HotCookies\bin\Debug\net6.0-windows\selenium-manager\linux\selenium-manager
+Z:\Programming\ProjectC#\HotCookies\bin\Debug\net6.0-windows\selenium-manager\macos\selenium-manager
+Z:\Programming\ProjectC#\HotCookies\bin\Debug\net6.0-windows\selenium-manager\windows\selenium-manager.exe
+Z:\Programming\ProjectC#\HotCookies\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+Z:\Programming\ProjectC#\HotCookies\bin\Debug\net6.0-windows\WebDriver.Support.dll
+Z:\Programming\ProjectC#\HotCookies\bin\Debug\net6.0-windows\WebDriver.dll
+Z:\Programming\ProjectC#\HotCookies\obj\Debug\net6.0-windows\HotCookies.csproj.CopyComplete

@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "/DtyYHLoq512Z/aMY+ZwxLoUrcZgbFuU0uYaOOzBGnl1meDkW6gII7lbOP4QEt86bFv09y0ZHgdDiRCMJEUIxA==",
+  "dgSpecHash": "8+37DOaJAwKMHO5RfOBBknbrXDHTER9Qay4TJeJrSVH3ddSz+FVtVziLPgGG6UcQYr+mRD0MM4VvcKTVvPcDcA==",
   "success": true,
   "projectFilePath": "Z:\\Programming\\ProjectC#\\HotCookies\\HotCookies.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\SKTV-1\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\SKTV-1\\.nuget\\packages\\selenium.support\\4.10.0\\selenium.support.4.10.0.nupkg.sha512",
+    "C:\\Users\\SKTV-1\\.nuget\\packages\\selenium.webdriver\\4.10.0\\selenium.webdriver.4.10.0.nupkg.sha512",
+    "C:\\Users\\SKTV-1\\.nuget\\packages\\selenium.webdriver.chromedriver\\114.0.5735.9000\\selenium.webdriver.chromedriver.114.0.5735.9000.nupkg.sha512"
+  ],
   "logs": []
 }
