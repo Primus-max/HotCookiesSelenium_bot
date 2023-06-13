@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotCookies"
         mc:Ignorable="d"
-        Title="Прогреваем куки" 
+        Title="Прогреваем куки"
         Height="600"
         Width="400">
     <Grid>
@@ -21,11 +21,19 @@
 
                 <!-- Поле для поисковых запросов -->
                 <StackPanel  Margin="0 20 0 20">
-                    <TextBlock Text="Поисковые запросы. Вводите через запятую."
+                    <TextBlock Text="Поисковые запросы. Новый запрос с новой строки."
                                Margin="0 0 0 10"/>
                     <RichTextBox x:Name="searchQueriesTextBox"
                                  Height="240"
-                                 VerticalScrollBarVisibility="Auto"/>
+                                 VerticalScrollBarVisibility="Auto">
+                        <RichTextBox.Resources>
+                            <Style TargetType="Paragraph">
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="LineHeight" Value="1" />
+                            </Style>
+                        </RichTextBox.Resources>
+                    </RichTextBox>
+
                 </StackPanel>
 
                 <!-- Поле для ввода рандомного выбора количества поисковых запросов -->
@@ -40,7 +48,8 @@
                     <TextBlock Text="До:" Margin="20 0 0 0"/>
                     <TextBox x:Name="maxSearchCountTextBox"
                              MinWidth="40"
-                             Margin="5 0 0 0" />
+                             Margin="5 0 0 0"
+                             LostFocus="MaxSearchCountTextBox_LostFocus" />
                 </StackPanel>
 
                 <!-- Поле для ввода рандомного выбора количества посещенных сайтов по одному запросу -->

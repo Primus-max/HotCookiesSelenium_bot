@@ -30,6 +30,9 @@ namespace HotCookies
 
         private void RunButton_Click(object sender, RoutedEventArgs e)
         {
+            bool IsCkeckMaxValue = CheckMaxCountSerachQuery();
+            if (!IsCkeckMaxValue) return;
+
             // Создание объекта модели и заполнение его данными из полей интерфейса
             var configuration = new ConfigurationModel
             {
@@ -78,6 +81,11 @@ namespace HotCookies
             }
         }
 
+        private void MaxSearchCountTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            CheckMaxCountSerachQuery();
+        }
+
         private string GetTextFromRichTextBox(RichTextBox richTextBox)
         {
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
@@ -101,6 +109,27 @@ namespace HotCookies
             }
         }
 
+        private bool CheckMaxCountSerachQuery()
+        {
+            int minSearchCount = 0;
+            int maxSearchCount = 0;
+            int queryCount = 0;
 
+            if (int.TryParse(minSearchCountTextBox.Text, out minSearchCount) &&
+                int.TryParse(maxSearchCountTextBox.Text, out maxSearchCount))
+            {
+                string searchQueriesText = GetTextFromRichTextBox(searchQueriesTextBox);
+                string[] queries = searchQueriesText.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                queryCount = queries.Length;
+
+                if (maxSearchCount > queryCount)
+                {
+                    MessageBox.Show($"Вы ввели маскимальное число больше чем колличество запросов в списке" + "\r" +
+                        $"Ввели {maxSearchCount} запросов в списке {queryCount}");
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
