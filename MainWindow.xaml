@@ -9,6 +9,7 @@
     <Grid>
         <Border Padding="20">
             <StackPanel>
+                <!--Поле для ввода количества пройденных циклов-->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Сколько раз повторить цикл:"/>
                     <TextBox
@@ -16,6 +17,7 @@
                         Margin="40 0 0 0"/>
                 </StackPanel>
 
+                <!--Поле для поисковых запросов-->
                 <StackPanel  Margin="0 20 0 20">
                     <TextBlock Text="Поисковые запросы. Вводите через запятую."
                                Margin="0 0 0 10"/>
@@ -24,6 +26,7 @@
                         VerticalScrollBarVisibility="Auto"/>
                 </StackPanel>
 
+                <!--Поле для ввода рандомного выбора колличества поисковых запросов-->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Сколько запросов"
                                Margin="0 0 10 0"/>
@@ -38,6 +41,7 @@
                         Margin="5 0 0 0" />
                 </StackPanel>
 
+                <!--Поле для ввода рандомного выбора колличества поседенных сайтов по одному запросу-->
                 <StackPanel Orientation="Horizontal"
                             Margin="0 20 0 0">
                     <TextBlock Text="Сколько посетить сйтов"
