@@ -46,12 +46,15 @@ public class SearchBot
                 //await page.SetViewportAsync(new ViewPortOptions { Width = 1920, Height = 1080 });
                 await page.GoToAsync("https://www.google.com");
 
+
                 for (int i = 0; i < configuration.RepeatCount; i++)
                 {
                     string searchQuery = GetRandomSearchQuery();
                     await PerformSearch(page, searchQuery);
                     await SpendRandomTime();
-                    await GetSearchResultLinks(page);
+
+                    var HTML = await page.GetContentAsync();
+                    var searchedLinks = await GetSearchResultLinks(page);
 
                     await ScrollPageSmoothly(page);
                     await ScrollPageSmoothly(page, true);
@@ -73,14 +76,24 @@ public class SearchBot
 
     private async Task<List<string>> GetSearchResultLinks(IPage page)
     {
-        .await page.WaitForSelectorAsync("h3.LC20lb.MBeuO.DKV0Md");
-        var links = await page.EvaluateExpressionAsync<string[]>(@"
-        Array.from(document.querySelectorAll('h3.LC20lb.MBeuO.DKV0Md'))
-             .map(link => link.textContent.trim())
-    ");
+        var linkElements = await page.QuerySelectorAllAsync(".cz3goc");
+        var linkElementss = await page.QuerySelectorAllAsync("div");
 
-        return links.ToList();
+        var links = new List<string>();
+        foreach (var element in linkElements)
+        {
+            var linkText = await element.GetPropertyAsync("textContent");
+            var link = linkText?.ToString()?.Trim();
+            if (!string.IsNullOrEmpty(link))
+            {
+                links.Add(link);
+            }
+        }
+
+        return links;
     }
+
+
 
 
     private async Task ScrollPageSmoothly(IPage page, bool scrollUp = false)
