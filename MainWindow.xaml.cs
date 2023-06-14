@@ -56,6 +56,7 @@ namespace HotCookies
             File.WriteAllText("config.json", json);
 
             List<Profile> profiles = await ProfileManager.GetProfiles();
+            List<Group> groups = await GroupManager.GetGroups();
 
             Browser connectedBrowser = await BrowserManager.ConnectBrowser("j75liy3");
             //string groupName = await GetGroupList();
