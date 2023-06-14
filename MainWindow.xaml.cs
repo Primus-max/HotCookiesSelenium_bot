@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PuppeteerSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -54,10 +55,13 @@ namespace HotCookies
             // Запись JSON-строки в файл
             File.WriteAllText("config.json", json);
 
-            var remoteDriver = await BrowserManager.ConnectBrowser("j75liy3");
+            List<Profile> profiles = await ProfileManager.GetProfiles();
+
+            Browser connectedBrowser = await BrowserManager.ConnectBrowser("j75liy3");
             //string groupName = await GetGroupList();
         }
 
+        // Загружаю и устанавливаю в поля конфигурационные данные
         private void LoadConfiguration()
         {
             try
@@ -85,11 +89,13 @@ namespace HotCookies
             }
         }
 
+        
         private void MaxSearchCountTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             CheckMaxCountSerachQuery();
         }
 
+// Метод проавильного получения данных из поля с поисковыми запросами       
         private string GetTextFromRichTextBox(RichTextBox richTextBox)
         {
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
@@ -104,6 +110,7 @@ namespace HotCookies
             }
         }
 
+        // Метод правлиьной устанвоки данных в поле с поисковыми запросами
         private void SetTextToRichTextBox(RichTextBox richTextBox, string text)
         {
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
@@ -113,6 +120,7 @@ namespace HotCookies
             }
         }
 
+        // Проверяю полее ввода для рандомного выбора поисковых запросов, чтобы цифры не была больше, чем сам список запросов
         private bool CheckMaxCountSerachQuery()
         {
             int minSearchCount = 0;
