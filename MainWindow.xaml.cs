@@ -2,20 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HotCookies
 {
@@ -55,11 +48,13 @@ namespace HotCookies
             // Запись JSON-строки в файл
             File.WriteAllText("config.json", json);
 
-            List<Profile> profiles = await ProfileManager.GetProfiles();
-            List<Group> groups = await GroupManager.GetGroups();
-
-            Browser connectedBrowser = await BrowserManager.ConnectBrowser("j75liy3");
+            //List<Profile> profiles = await ProfileManager.GetProfiles();
+            //List<Group> groups = await GroupManager.GetGroups();
+            //Browser connectedBrowser = await BrowserManager.ConnectBrowser("j75liy3");
             //string groupName = await GetGroupList();
+
+            SearchBot searchBot = new SearchBot();
+            await searchBot.Run();
         }
 
         // Загружаю и устанавливаю в поля конфигурационные данные
@@ -90,13 +85,13 @@ namespace HotCookies
             }
         }
 
-        
+
         private void MaxSearchCountTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             CheckMaxCountSerachQuery();
         }
 
-// Метод проавильного получения данных из поля с поисковыми запросами       
+        // Метод проавильного получения данных из поля с поисковыми запросами       
         private string GetTextFromRichTextBox(RichTextBox richTextBox)
         {
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
