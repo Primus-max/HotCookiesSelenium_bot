@@ -45,10 +45,22 @@ public class SearchBot
                     continue;
                 }
 
+                // Открываю новую вкладку и перехожу
                 var page = await browser.NewPageAsync();
-                //await page.SetViewportAsync(new ViewPortOptions { Width = 1920, Height = 1080 });
                 await page.GoToAsync("https://www.google.com");
-                               
+
+                //var pages = await browser.PagesAsync();
+
+                //for (int i = pages.Length - 1; i > 0; i--)
+                //{
+                //    await pages[i].CloseAsync();
+                //}
+
+                //var page = pages[0];
+                //await page.GoToAsync("https://www.google.com");
+
+
+
 
                 for (int i = 0; i < configuration?.RepeatCount; i++)
                 {
@@ -140,13 +152,13 @@ public class SearchBot
             {
                 // Достигнут нижний конец страницы, прокручиваем вверх
                 await ScrollPageSmoothly(page, ScrollDirection.Up);
-                await page.WaitForTimeoutAsync(500); // Добавляем небольшую задержку между прокрутками
+                await page.WaitForTimeoutAsync(1000); // Добавляем небольшую задержку между прокрутками
             }
             else
             {
                 // Продолжаем прокручивать вниз
                 await ScrollPageSmoothly(page, ScrollDirection.Down);
-                await page.WaitForTimeoutAsync(500); // Добавляем небольшую задержку между прокрутками
+                await page.WaitForTimeoutAsync(1500); // Добавляем небольшую задержку между прокрутками
             }
         }
     }
@@ -162,8 +174,8 @@ public class SearchBot
         var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
         var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
 
-        var scrollStep = 200;
-        var scrollDelay = 200; // Задержка между прокруткой
+        var scrollStep = 150;
+        var scrollDelay = 300; // Задержка между прокруткой
 
         if (direction == ScrollDirection.Down)
         {
