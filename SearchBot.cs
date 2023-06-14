@@ -17,7 +17,7 @@ public class SearchBot
 {
     private static readonly Random random = new Random();
 
-    private ConfigurationModel configuration;
+    private ConfigurationModel? configuration;
 
     public async Task Run()
     {
@@ -26,7 +26,7 @@ public class SearchBot
         List<Profile> profiles = await ProfileManager.GetProfiles();
 
         // Поиск профилей по группе
-        List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration.ProfileGroupName).ToList();
+        List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
         if (selectedProfiles.Count == 0)
         {
             Console.WriteLine($"No profiles found in group {configuration.ProfileGroupName}.");
@@ -35,6 +35,8 @@ public class SearchBot
 
         foreach (Profile profile in selectedProfiles)
         {
+            if (profile is null) continue;
+
             using (var browser = await BrowserManager.ConnectBrowser(profile.UserId))
             {
                 if (browser == null)
@@ -48,7 +50,7 @@ public class SearchBot
                 await page.GoToAsync("https://www.google.com");
                                
 
-                for (int i = 0; i < configuration.RepeatCount; i++)
+                for (int i = 0; i < configuration?.RepeatCount; i++)
                 {
                     string searchQuery = GetRandomSearchQuery();
                     await PerformSearch(page, searchQuery);
@@ -59,9 +61,9 @@ public class SearchBot
 
 
 
-                    await ScrollPageSmoothly(page);
-                    await ScrollPageSmoothly(page, true);
-                    await ReturnToGoogleSearch(page);
+                    //await ScrollPageSmoothly(page);
+                    //await ScrollPageSmoothly(page, true);
+                    //await ReturnToGoogleSearch(page);
                 }
             }
         }
@@ -80,36 +82,136 @@ public class SearchBot
 
     private async Task ClickRandomLink(IPage page)
     {
+        // Ждём загрузки DOM
+       // await page.WaitForNavigationAsync(new NavigationOptions { WaitUntil = new[] { WaitUntilNavigation.Networkidle0 } });      
+
         var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
-        if (linkElements.Length > 0)
+        var allLinks = linkElements.Cast<ElementHandle>().ToList();
+
+        int minSiteVisitCount = configuration.MinSiteVisitCount;
+        int maxSiteVisitCount = configuration.MaxSiteVisitCount;
+
+        while (allLinks.Count < maxSiteVisitCount + 1)
         {
-            var randomLinkIndex = new Random().Next(0, linkElements.Length);
-            var randomLink = linkElements[randomLinkIndex];
+            await page.EvaluateFunctionAsync(@"() => {
+            window.scrollBy(0, 200); // Прокрутка страницы на 200 пикселей вниз
+        }");
+            await page.WaitForTimeoutAsync(1000); // Добавьте задержку для плавной прокрутки
+
+            linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
+            allLinks.AddRange(linkElements.Cast<ElementHandle>());
+        }
+
+        var siteVisitCount = Math.Min(new Random().Next(minSiteVisitCount, maxSiteVisitCount + 1), allLinks.Count);
+        for (var i = 0; i < siteVisitCount; i++)
+        {
+            var randomLinkIndex = new Random().Next(0, allLinks.Count);
+            var randomLink = allLinks[randomLinkIndex];
 
             await page.EvaluateFunctionAsync(@"(element) => {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }", randomLink);
 
+            await page.WaitForTimeoutAsync(1000);
+
             await randomLink.ClickAsync();
+
+            await SimulateUserBehavior(page);
+        }
+    }
+
+    private async Task SimulateUserBehavior(IPage page)
+    {
+        await page.WaitForNavigationAsync();
+
+        int minTimeSpent = configuration.MinTimeSpent;
+        int maxTimeSpent = configuration.MaxTimeSpent;
+
+        var randomTime = new Random().Next(minTimeSpent, maxTimeSpent + 1) * 1000; // Преобразуем время в миллисекунды
+        var endTime = DateTime.UtcNow.AddMilliseconds(randomTime);
+
+        while (DateTime.UtcNow < endTime)
+        {
+            var scrollHeight = await page.EvaluateExpressionAsync<int>("document.body.scrollHeight");
+            var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
+            var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
+
+            if (currentScroll + windowHeight >= scrollHeight)
+            {
+                // Достигнут нижний конец страницы, прокручиваем вверх
+                await ScrollPageSmoothly(page, ScrollDirection.Up);
+                await page.WaitForTimeoutAsync(500); // Добавляем небольшую задержку между прокрутками
+            }
+            else
+            {
+                // Продолжаем прокручивать вниз
+                await ScrollPageSmoothly(page, ScrollDirection.Down);
+                await page.WaitForTimeoutAsync(500); // Добавляем небольшую задержку между прокрутками
+            }
+        }
+    }
+
+    private async Task ScrollPageSmoothly(IPage page, ScrollDirection direction)
+    {
+        if (page.IsClosed)
+        {
+            return; // Прекращаем выполнение, если страница закрыта
+        }
+
+        var scrollHeight = await page.EvaluateExpressionAsync<int>("document.body.scrollHeight");
+        var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
+        var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
+
+        var scrollStep = 200;
+        var scrollDelay = 200; // Задержка между прокруткой
+
+        if (direction == ScrollDirection.Down)
+        {
+            while (currentScroll + windowHeight < scrollHeight)
+            {
+                currentScroll += scrollStep;
+                await page.EvaluateFunctionAsync(@"(scrollStep) => {
+                window.scrollBy(0, scrollStep);
+            }", scrollStep);
+
+                await page.WaitForTimeoutAsync(scrollDelay);
+            }
+        }
+        else if (direction == ScrollDirection.Up)
+        {
+            while (currentScroll > 0)
+            {
+                currentScroll -= scrollStep;
+                await page.EvaluateFunctionAsync(@"(scrollStep) => {
+                window.scrollBy(0, -scrollStep);
+            }", scrollStep);
+
+                await page.WaitForTimeoutAsync(scrollDelay);
+            }
         }
     }
 
 
 
-
-
-    private async Task ScrollPageSmoothly(IPage page, bool scrollUp = false)
+    private enum ScrollDirection
     {
-        int scrollDistance = scrollUp ? -1000 : 1000;
-        await page.EvaluateExpressionAsync($"window.scrollBy(0, {scrollDistance});");
-        await page.WaitForTimeoutAsync(1000);
+        Up,
+        Down
     }
 
-    private async Task ReturnToGoogleSearch(IPage page)
-    {
-        await page.GoToAsync("https://www.google.com");
-        await page.WaitForTimeoutAsync(2000);
-    }
+
+    //private async Task ScrollPageSmoothly(IPage page, bool scrollUp = false)
+    //{
+    //    int scrollDistance = scrollUp ? -1000 : 1000;
+    //    await page.EvaluateExpressionAsync($"window.scrollBy(0, {scrollDistance});");
+    //    await page.WaitForTimeoutAsync(1000);
+    //}
+
+    //private async Task ReturnToGoogleSearch(IPage page)
+    //{
+    //    await page.GoToAsync("https://www.google.com");
+    //    await page.WaitForTimeoutAsync(2000);
+    //}
 
     private void LoadConfiguration()
     {
