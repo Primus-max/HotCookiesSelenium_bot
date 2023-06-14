@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 public class SearchBot
@@ -45,7 +46,7 @@ public class SearchBot
                 var page = await browser.NewPageAsync();
                 //await page.SetViewportAsync(new ViewPortOptions { Width = 1920, Height = 1080 });
                 await page.GoToAsync("https://www.google.com");
-
+                               
 
                 for (int i = 0; i < configuration.RepeatCount; i++)
                 {
@@ -53,8 +54,10 @@ public class SearchBot
                     await PerformSearch(page, searchQuery);
                     await SpendRandomTime();
 
-                    var HTML = await page.GetContentAsync();
-                    var searchedLinks = await GetSearchResultLinks(page);
+                    await ClickRandomLink(page);
+
+
+
 
                     await ScrollPageSmoothly(page);
                     await ScrollPageSmoothly(page, true);
@@ -63,6 +66,7 @@ public class SearchBot
             }
         }
     }
+
 
     private async Task PerformSearch(IPage page, string searchQuery)
     {
@@ -74,24 +78,22 @@ public class SearchBot
         // Добавьте код для ожидания загрузки страницы результатов поиска, если необходимо
     }
 
-    private async Task<List<string>> GetSearchResultLinks(IPage page)
+    private async Task ClickRandomLink(IPage page)
     {
-        var linkElements = await page.QuerySelectorAllAsync(".cz3goc");
-        var linkElementss = await page.QuerySelectorAllAsync("div");
-
-        var links = new List<string>();
-        foreach (var element in linkElements)
+        var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
+        if (linkElements.Length > 0)
         {
-            var linkText = await element.GetPropertyAsync("textContent");
-            var link = linkText?.ToString()?.Trim();
-            if (!string.IsNullOrEmpty(link))
-            {
-                links.Add(link);
-            }
-        }
+            var randomLinkIndex = new Random().Next(0, linkElements.Length);
+            var randomLink = linkElements[randomLinkIndex];
 
-        return links;
+            await page.EvaluateFunctionAsync(@"(element) => {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }", randomLink);
+
+            await randomLink.ClickAsync();
+        }
     }
+
 
 
 

@@ -11,6 +11,8 @@ namespace HotCookies
     {
         public static async Task<Browser> ConnectBrowser(string profileId)
         {
+            //await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+
             string launchUrl = $"http://local.adspower.com:50325/api/v1/browser/start?user_id={profileId}";
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(launchUrl);
@@ -33,7 +35,8 @@ namespace HotCookies
 
             var browser = await Puppeteer.ConnectAsync(new ConnectOptions
             {
-                BrowserWSEndpoint = remoteAddressWithPuppeteer
+                BrowserWSEndpoint = remoteAddressWithPuppeteer,
+                 
             });
 
             if (status == "failed")
@@ -41,7 +44,7 @@ namespace HotCookies
                 await browser.CloseAsync();
                 return null;
             }
-
+            
             return (Browser)browser;
         }
     }
