@@ -373,7 +373,6 @@ public class SearchBot
         }
     }
 
-
     private enum ScrollDirection
     {
         Up,
@@ -382,8 +381,17 @@ public class SearchBot
 
     private void LoadConfiguration()
     {
-        string json = File.ReadAllText("config.json");
-        configuration = JsonConvert.DeserializeObject<ConfigurationModel>(json);
+        try
+        {
+            string json = File.ReadAllText("config.json");
+            configuration = JsonConvert.DeserializeObject<ConfigurationModel>(json);
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибки при загрузке и десериализации конфигурации
+            
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
+        }
     }
 
     private string GetRandomSearchQuery()
