@@ -21,73 +21,91 @@ public class SearchBot
     Browser browser = null;
     public async Task Run()
     {
-        LoadConfiguration();
-
-        List<Profile> profiles = await ProfileManager.GetProfiles();
-
-        // Поиск профилей по группе
-        List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
-        if (selectedProfiles.Count == 0)
+        try
         {
-            Console.WriteLine($"No profiles found in group {configuration.ProfileGroupName}.");
-            return;
-        }
+            LoadConfiguration();
 
-        foreach (Profile profile in selectedProfiles)
-        {
-            if (profile is null) continue;
+            List<Profile> profiles = await ProfileManager.GetProfiles();
 
-            browser = await BrowserManager.ConnectBrowser(profile.UserId);
-            
-                if (browser == null)
-                {
-                    Console.WriteLine($"Failed to connect browser for profile {profile.UserId}.");
-                    continue;
-                }
-
-                // Открываю новую вкладку и перехожу
-                var page = await browser.NewPageAsync();
-                await page.GoToAsync("https://www.google.com");
-
-                //var pages = await browser.PagesAsync();
-
-                //for (int i = pages.Length - 1; i > 0; i--)
-                //{
-                //    await pages[i].CloseAsync();
-                //}
-
-                //var page = pages[0];
-                //await page.GoToAsync("https://www.google.com");
-
-
-                Random random = new Random();
-                int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
-
-                for (int i = 0; i < randomVisitCount; i++)
-                {
-                    string searchQuery = GetRandomSearchQuery();
-                    await PerformSearch(page, searchQuery);
-                    await SpendRandomTime();
-
-                    await ClickRandomLink(page);
-
-                }
-            
-
-            var pages = await browser.PagesAsync();
-
-            for (int i = pages.Length - 1; i > 0; i--)
+            // Поиск профилей по группе
+            List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
+            if (selectedProfiles.Count == 0)
             {
-                await pages[i].CloseAsync();
-                await page.WaitForTimeoutAsync(500);
+                Console.WriteLine($"No profiles found in group {configuration.ProfileGroupName}.");
+                return;
             }
 
-            await page.WaitForTimeoutAsync(1000);
+            foreach (Profile profile in selectedProfiles)
+            {
+                try
+                {
+                    if (profile is null) continue;
 
-            if(browser != null)
-                await browser.CloseAsync();
+                    browser = await BrowserManager.ConnectBrowser(profile.UserId);
+
+                    if (browser == null)
+                    {
+                        Console.WriteLine($"Failed to connect browser for profile {profile.UserId}.");
+                        continue;
+                    }
+
+                    // Открываю новую вкладку и перехожу
+                    var page = await browser.NewPageAsync();
+                    await page.GoToAsync("https://www.google.com");
+
+                    //var pages = await browser.PagesAsync();
+
+                    //for (int i = pages.Length - 1; i > 0; i--)
+                    //{
+                    //    await pages[i].CloseAsync();
+                    //}
+
+                    //var page = pages[0];
+                    //await page.GoToAsync("https://www.google.com");
+
+
+                    Random random = new Random();
+                    int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
+
+                    for (int i = 0; i < randomVisitCount; i++)
+                    {
+                        string searchQuery = GetRandomSearchQuery();
+                        await PerformSearch(page, searchQuery);
+                        await SpendRandomTime();
+
+                        await ClickRandomLink(page);
+
+                    }
+
+                    var pages = await browser.PagesAsync();
+
+                    for (int i = pages.Length - 1; i > 0; i--)
+                    {
+                        await pages[i].CloseAsync();
+                        await page.WaitForTimeoutAsync(500);
+                    }
+
+                    await page.WaitForTimeoutAsync(1000);
+
+                    if (browser != null)
+                        await browser.CloseAsync();
+                }
+                catch (Exception ex)
+                {
+                    // Обработка ошибок, возникающих внутри цикла обработки профилей
+                   
+                    // Логирование ошибки или предпринятие других действий по обработке ошибки
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибок, возникающих внутри метода Run
+            
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
+
 
     private async Task PerformSearch(IPage page, string searchQuery)
     {
