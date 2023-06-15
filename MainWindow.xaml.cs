@@ -50,45 +50,37 @@ namespace HotCookies
             File.WriteAllText("config.json", json);
 
 
-            int repeatCount = int.Parse(repeatCountTextBox.Text);
-            for (int i = 0; i < repeatCount; i++)
-            {
-                SearchBot searchBot = new SearchBot();
-                await searchBot.Run();
-            }
-            
-            //// Запускаем несколько потоков
-            //async Task RunParallel()
+            //int repeatCount = int.Parse(repeatCountTextBox.Text);
+            //for (int i = 0; i < repeatCount; i++)
             //{
-            //    SemaphoreSlim semaphore = new SemaphoreSlim(3); // Ограничение на одновременное выполнение трех потоков
-            //    List<Task<Browser>> tasks = new List<Task<Browser>>();
-
-            //    for (int i = 0; i < 3; i++) // Запуск трех потоков
-            //    {
-            //        tasks.Add(Task.Run(async () =>
-            //        {
-            //            await semaphore.WaitAsync(); // Запрос на получение разрешения у семафора
-            //            try
-            //            {
-            //                SearchBot searchBot = new SearchBot();
-            //                return await searchBot.Run(); // Вызов метода Run и возврат результата
-            //            }
-            //            finally
-            //            {
-            //                semaphore.Release(); // Освобождение разрешения семафора
-            //            }
-            //        }));
-
-            //        // Ожидание 1 секунды между запусками потоков
-            //        await Task.Delay(1000);
-            //    }
-
-            //    // Ожидание завершения всех задач
-            //    await Task.WhenAll(tasks);
+            //    SearchBot searchBot = new SearchBot();
+            //    await searchBot.Run();
             //}
 
-            //// Вызов метода RunParallel
-            //await RunParallel();
+
+            Task task1 = Task.Run(async () =>
+            {
+                SearchBot searchBot1 = new SearchBot();
+                await Task.Delay(TimeSpan.FromSeconds(1)); // Задержка 1 секунда
+                await searchBot1.Run();
+            });
+
+            Task task2 = Task.Run(async () =>
+            {
+                SearchBot searchBot2 = new SearchBot();
+                await Task.Delay(TimeSpan.FromSeconds(1)); // Задержка 1 секунда
+                await searchBot2.Run();
+            });
+
+            Task task3 = Task.Run(async () =>
+            {
+                SearchBot searchBot3 = new SearchBot();
+                await Task.Delay(TimeSpan.FromSeconds(1)); // Задержка 1 секунда
+                await searchBot3.Run();
+            });
+
+            await Task.WhenAll(task1, task2, task3);
+
 
 
         }
