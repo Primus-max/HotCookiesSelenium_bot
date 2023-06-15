@@ -21,90 +21,75 @@ public class SearchBot
 
     private ConfigurationModel? configuration;
     Browser browser = null;
-    private static readonly SemaphoreSlim profilesLock = new SemaphoreSlim(1);
+    private static readonly SemaphoreSlim serverSemaphore = new SemaphoreSlim(1, 1);
+
     public async Task Run()
     {
         try
         {
             LoadConfiguration();
 
-            List<Profile> profiles;
-
-            await profilesLock.WaitAsync();
-            try
-            {
-                profiles = await ProfileManager.GetProfiles();
-            }
-            finally
-            {
-                profilesLock.Release();
-            }
-
+            List<Profile> profiles = await ProfileManager.GetProfiles();
 
             // Поиск профилей по группе
             List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
             if (selectedProfiles.Count == 0)
-            {                
+            {
                 return;
             }
 
+            List<Task> tasks = new List<Task>();
+
             foreach (Profile profile in selectedProfiles)
             {
-                try
+                tasks.Add(Task.Run(async () =>
                 {
-                    if (profile is null) continue;
-
-                    browser = await BrowserManager.ConnectBrowser(profile.UserId);
-
-                    if (browser == null)
-                    {                        
-                        continue;
-                    }
-
-                    // Открываю новую вкладку и перехожу
-                    var page = await browser.NewPageAsync();
-                    await page.GoToAsync("https://www.google.com");
-
-
-                    Random random = new Random();
-                    int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
-
-                    for (int i = 0; i < randomVisitCount; i++)
+                    try
                     {
-                        string searchQuery = GetRandomSearchQuery();
-                        await PerformSearch(page, searchQuery);
-                        await SpendRandomTime();
+                        if (profile is null) return;
 
-                        await ClickRandomLink(page);
+                        await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
+                        var browser = await BrowserManager.ConnectBrowser(profile.UserId);
+                        serverSemaphore.Release(); // Освобождаем доступ к серверу
 
-                    }
+                        if (browser == null)
+                        {
+                            return;
+                        }
 
-                    var pages = await browser.PagesAsync();
+                        var page = await browser.NewPageAsync();
+                        await page.GoToAsync("https://www.google.com");
 
-                    for (int i = pages.Length - 1; i > 0; i--)
-                    {
-                        await pages[i].CloseAsync();
-                        await page.WaitForTimeoutAsync(500);
-                    }
+                        Random random = new Random();
+                        int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
 
-                    await page.WaitForTimeoutAsync(1000);
+                        for (int i = 0; i < randomVisitCount; i++)
+                        {
+                            await PerformSearch(page, GetRandomSearchQuery());
+                            await SpendRandomTime();
+                            await ClickRandomLink(page);
 
-                    if (browser != null)
+                            await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием страницы
+                            await page.CloseAsync();
+                            serverSemaphore.Release(); // Освобождаем доступ к серверу
+                        }
+
+                        await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием браузера
                         await browser.CloseAsync();
-                }
-                catch (Exception ex)
-                {
-                    // Обработка ошибок, возникающих внутри цикла обработки профилей
-                    MessageBox.Show($"Ошибка в методе Run {ex.Message}");
-                    // Логирование ошибки или предпринятие других действий по обработке ошибки
-                }
+                        serverSemaphore.Release(); // Освобождаем доступ к серверу
+                    }
+                    catch (Exception ex)
+                    {
+                        // Обработка ошибок
+                    }
+                }));
             }
+
+            await Task.WhenAll(tasks);
         }
         catch (Exception ex)
         {
-            // Обработка ошибок, возникающих внутри метода Run
-            MessageBox.Show($"Ошибка в методе Run {ex.Message}");
-            // Логирование ошибки или предпринятие других действий по обработке ошибки
+            // Обработка ошибок
         }
     }
 
@@ -213,6 +198,7 @@ public class SearchBot
                         {
                             // Обработка ошибок, возникающих при обработке каждой ссылки
                             //MessageBox.Show($"Ошибка в методе ClickRandomLink {ex.Message}");
+                            linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
                             continue;
                             // Логирование ошибки или предпринятие других действий по обработке ошибки
                         }

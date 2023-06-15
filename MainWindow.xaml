@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Прогреваем куки"
         Height="600"
-        Width="400">
+        Width="460">
     <Grid>
         <Border Padding="20">
             <StackPanel>
