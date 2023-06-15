@@ -94,31 +94,26 @@ public class SearchBot
 
     private async Task ClickRandomLink(IPage page)
     {
-        // Ждём загрузки DOM
-       // await page.WaitForNavigationAsync(new NavigationOptions { WaitUntil = new[] { WaitUntilNavigation.Networkidle0 } });      
-
-        var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
-        var allLinks = linkElements.Cast<ElementHandle>().ToList();
+        var clickedLinks = new List<ElementHandle>();
 
         int minSiteVisitCount = configuration.MinSiteVisitCount;
         int maxSiteVisitCount = configuration.MaxSiteVisitCount;
 
-        while (allLinks.Count < maxSiteVisitCount + 1)
+        while (clickedLinks.Count < maxSiteVisitCount)
         {
-            await page.EvaluateFunctionAsync(@"() => {
-            window.scrollBy(0, 200); // Прокрутка страницы на 200 пикселей вниз
-        }");
-            await page.WaitForTimeoutAsync(1000); // Добавьте задержку для плавной прокрутки
+            var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
+            var allLinks = linkElements.Cast<ElementHandle>().ToList();
+            var remainingLinks = allLinks.Except(clickedLinks).ToList();
 
-            linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
-            allLinks.AddRange(linkElements.Cast<ElementHandle>());
-        }
+            if (remainingLinks.Count == 0)
+            {
+                break; // Выходим из цикла, если все ссылки уже были посещены
+            }
 
-        var siteVisitCount = Math.Min(new Random().Next(minSiteVisitCount, maxSiteVisitCount + 1), allLinks.Count);
-        for (var i = 0; i < siteVisitCount; i++)
-        {
-            var randomLinkIndex = new Random().Next(0, allLinks.Count);
-            var randomLink = allLinks[randomLinkIndex];
+            var randomLinkIndex = new Random().Next(0, remainingLinks.Count);
+            var randomLink = remainingLinks[randomLinkIndex];
+
+            clickedLinks.Add(randomLink);
 
             await page.EvaluateFunctionAsync(@"(element) => {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -129,12 +124,17 @@ public class SearchBot
             await randomLink.ClickAsync();
 
             await SimulateUserBehavior(page);
+
+            await page.GoBackAsync();
+
+            await page.WaitForTimeoutAsync(2000);
         }
     }
 
+
     private async Task SimulateUserBehavior(IPage page)
     {
-        await page.WaitForNavigationAsync();
+        await page.WaitForTimeoutAsync(10000);
 
         int minTimeSpent = configuration.MinTimeSpent;
         int maxTimeSpent = configuration.MaxTimeSpent;
