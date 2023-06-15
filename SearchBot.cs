@@ -254,34 +254,53 @@ public class SearchBot
 
     private async Task SimulateUserBehavior(IPage page)
     {
-        await page.WaitForTimeoutAsync(10000);
-
-        int minTimeSpent = configuration.MinTimeSpent;
-        int maxTimeSpent = configuration.MaxTimeSpent;
-
-        var randomTime = new Random().Next(minTimeSpent, maxTimeSpent + 1) * 1000; // Преобразуем время в миллисекунды
-        var endTime = DateTime.UtcNow.AddMilliseconds(randomTime);
-
-        while (DateTime.UtcNow < endTime)
+        try
         {
-            var scrollHeight = await page.EvaluateExpressionAsync<int>("document.body.scrollHeight");
-            var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
-            var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
+            await page.WaitForTimeoutAsync(10000);
 
-            if (currentScroll + windowHeight >= scrollHeight)
+            int minTimeSpent = configuration.MinTimeSpent;
+            int maxTimeSpent = configuration.MaxTimeSpent;
+
+            var randomTime = new Random().Next(minTimeSpent, maxTimeSpent + 1) * 1000; // Преобразуем время в миллисекунды
+            var endTime = DateTime.UtcNow.AddMilliseconds(randomTime);
+
+            while (DateTime.UtcNow < endTime)
             {
-                // Достигнут нижний конец страницы, прокручиваем вверх
-                await ScrollPageSmoothly(page, ScrollDirection.Up);
-                await page.WaitForTimeoutAsync(1000); // Добавляем небольшую задержку между прокрутками
-            }
-            else
-            {
-                // Продолжаем прокручивать вниз
-                await ScrollPageSmoothly(page, ScrollDirection.Down);
-                await page.WaitForTimeoutAsync(1500); // Добавляем небольшую задержку между прокрутками
+                try
+                {
+                    var scrollHeight = await page.EvaluateExpressionAsync<int>("document.body.scrollHeight");
+                    var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
+                    var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
+
+                    if (currentScroll + windowHeight >= scrollHeight)
+                    {
+                        // Достигнут нижний конец страницы, прокручиваем вверх
+                        await ScrollPageSmoothly(page, ScrollDirection.Up);
+                        await page.WaitForTimeoutAsync(1000); // Добавляем небольшую задержку между прокрутками
+                    }
+                    else
+                    {
+                        // Продолжаем прокручивать вниз
+                        await ScrollPageSmoothly(page, ScrollDirection.Down);
+                        await page.WaitForTimeoutAsync(1500); // Добавляем небольшую задержку между прокрутками
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Обработка ошибок, возникающих при симуляции поведения пользователя
+                    continue;
+                    // Логирование ошибки или предпринятие других действий по обработке ошибки
+                }
             }
         }
+        catch (Exception ex)
+        {
+            // Обработка ошибок, возникающих при выполнении операций внутри метода SimulateUserBehavior
+            
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
+        }
     }
+
 
     private async Task ScrollPageSmoothly(IPage page, ScrollDirection direction)
     {
