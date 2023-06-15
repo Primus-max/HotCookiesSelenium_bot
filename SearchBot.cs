@@ -301,51 +301,78 @@ public class SearchBot
         }
     }
 
-
     private async Task ScrollPageSmoothly(IPage page, ScrollDirection direction)
     {
-        if (page.IsClosed)
+        try
         {
-            return; // Прекращаем выполнение, если страница закрыта
-        }
-
-        var scrollHeight = await page.EvaluateExpressionAsync<int>("document.body.scrollHeight");
-        var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
-        var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
-
-        var scrollStep = 150;
-
-         // Задержка между прокруткой
-
-        if (direction == ScrollDirection.Down)
-        {
-            while (currentScroll + windowHeight < scrollHeight)
+            if (page.IsClosed)
             {
-                currentScroll += scrollStep;
-                await page.EvaluateFunctionAsync(@"(scrollStep) => {
-                window.scrollBy(0, scrollStep);
-            }", scrollStep);
+                return; // Прекращаем выполнение, если страница закрыта
+            }
 
-                Random randomDelay = new Random();
-                int scrollDelay = randomDelay.Next(200, 1000);
-                await page.WaitForTimeoutAsync(scrollDelay);
+            var scrollHeight = await page.EvaluateExpressionAsync<int>("document.body.scrollHeight");
+            var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
+            var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
+
+            var scrollStep = 150;
+
+            // Задержка между прокруткой
+
+            if (direction == ScrollDirection.Down)
+            {
+                while (currentScroll + windowHeight < scrollHeight)
+                {
+                    try
+                    {
+                        currentScroll += scrollStep;
+                        await page.EvaluateFunctionAsync(@"(scrollStep) => {
+                        window.scrollBy(0, scrollStep);
+                    }", scrollStep);
+
+                        Random randomDelay = new Random();
+                        int scrollDelay = randomDelay.Next(200, 1000);
+                        await page.WaitForTimeoutAsync(scrollDelay);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Обработка ошибок, возникающих при прокрутке страницы вниз
+                        continue;
+                        // Логирование ошибки или предпринятие других действий по обработке ошибки
+                    }
+                }
+            }
+            else if (direction == ScrollDirection.Up)
+            {
+                while (currentScroll > 0)
+                {
+                    try
+                    {
+                        currentScroll -= scrollStep;
+                        await page.EvaluateFunctionAsync(@"(scrollStep) => {
+                        window.scrollBy(0, -scrollStep);
+                    }", scrollStep);
+
+                        Random randomDelay = new Random();
+                        int scrollDelay = randomDelay.Next(200, 1000);
+                        await page.WaitForTimeoutAsync(scrollDelay);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Обработка ошибок, возникающих при прокрутке страницы вверх
+                        continue;
+                        // Логирование ошибки или предпринятие других действий по обработке ошибки
+                    }
+                }
             }
         }
-        else if (direction == ScrollDirection.Up)
+        catch (Exception ex)
         {
-            while (currentScroll > 0)
-            {
-                currentScroll -= scrollStep;
-                await page.EvaluateFunctionAsync(@"(scrollStep) => {
-                window.scrollBy(0, -scrollStep);
-            }", scrollStep);
-
-                Random randomDelay = new Random();
-                int scrollDelay = randomDelay.Next(200, 1000);
-                await page.WaitForTimeoutAsync(scrollDelay);
-            }
+            // Обработка ошибок, возникающих при выполнении операций внутри метода ScrollPageSmoothly
+            Console.WriteLine($"An error occurred during ScrollPageSmoothly: {ex.Message}");
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
+
 
     private enum ScrollDirection
     {
