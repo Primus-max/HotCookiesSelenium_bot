@@ -109,13 +109,6 @@ public class SearchBot
         await page.Keyboard.PressAsync("Enter");
     }
 
-
-    //private async Task<string> GetInnerTextAsync(ElementHandle element)
-    //{
-    //    var innerText = await element.EvaluateFunctionAsync<string>("el => el.innerText");
-    //    return innerText;
-    //}
-
     private async Task ClickRandomLink(IPage page)
     {
         var clickedLinks = new List<string>();
@@ -151,7 +144,7 @@ public class SearchBot
                     scrollToY(y, duration);
                 }", linkElement);
 
-                    await page.WaitForTimeoutAsync(1000);
+                    await page.WaitForTimeoutAsync(2000);
 
                     await linkElement.ClickAsync();
 
@@ -196,7 +189,6 @@ public class SearchBot
             }
         }
     }
-
 
     private async Task SimulateUserBehavior(IPage page)
     {

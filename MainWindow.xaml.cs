@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,13 +49,48 @@ namespace HotCookies
             // Запись JSON-строки в файл
             File.WriteAllText("config.json", json);
 
-            //List<Profile> profiles = await ProfileManager.GetProfiles();
-            //List<Group> groups = await GroupManager.GetGroups();
-            //Browser connectedBrowser = await BrowserManager.ConnectBrowser("j75liy3");
-            //string groupName = await GetGroupList();
 
-            SearchBot searchBot = new SearchBot();
-            await searchBot.Run();
+            int repeatCount = int.Parse(repeatCountTextBox.Text);
+            for (int i = 0; i < repeatCount; i++)
+            {
+                SearchBot searchBot = new SearchBot();
+                await searchBot.Run();
+            }
+            
+            //// Запускаем несколько потоков
+            //async Task RunParallel()
+            //{
+            //    SemaphoreSlim semaphore = new SemaphoreSlim(3); // Ограничение на одновременное выполнение трех потоков
+            //    List<Task<Browser>> tasks = new List<Task<Browser>>();
+
+            //    for (int i = 0; i < 3; i++) // Запуск трех потоков
+            //    {
+            //        tasks.Add(Task.Run(async () =>
+            //        {
+            //            await semaphore.WaitAsync(); // Запрос на получение разрешения у семафора
+            //            try
+            //            {
+            //                SearchBot searchBot = new SearchBot();
+            //                return await searchBot.Run(); // Вызов метода Run и возврат результата
+            //            }
+            //            finally
+            //            {
+            //                semaphore.Release(); // Освобождение разрешения семафора
+            //            }
+            //        }));
+
+            //        // Ожидание 1 секунды между запусками потоков
+            //        await Task.Delay(1000);
+            //    }
+
+            //    // Ожидание завершения всех задач
+            //    await Task.WhenAll(tasks);
+            //}
+
+            //// Вызов метода RunParallel
+            //await RunParallel();
+
+
         }
 
         // Загружаю и устанавливаю в поля конфигурационные данные
