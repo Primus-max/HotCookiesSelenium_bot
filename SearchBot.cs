@@ -79,7 +79,10 @@ public class SearchBot
             for (int i = pages.Length - 1; i > 0; i--)
             {
                 await pages[i].CloseAsync();
+                await page.WaitForTimeoutAsync(500);
             }
+
+            await page.WaitForTimeoutAsync(1000);
 
             if(browser != null)
                 await browser.CloseAsync();
@@ -107,45 +110,93 @@ public class SearchBot
     }
 
 
+    //private async Task<string> GetInnerTextAsync(ElementHandle element)
+    //{
+    //    var innerText = await element.EvaluateFunctionAsync<string>("el => el.innerText");
+    //    return innerText;
+    //}
 
     private async Task ClickRandomLink(IPage page)
     {
-        var clickedLinks = new List<ElementHandle>();
-
-        int minSiteVisitCount = configuration.MinSiteVisitCount;
+        var clickedLinks = new List<string>();
         int maxSiteVisitCount = configuration.MaxSiteVisitCount;
 
         while (clickedLinks.Count < maxSiteVisitCount)
         {
             var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
-            var allLinks = linkElements.Cast<ElementHandle>().ToList();
-            var remainingLinks = allLinks.Except(clickedLinks).ToList();
 
-            if (remainingLinks.Count == 0)
+            foreach (var linkElement in linkElements)
             {
-                break; // Выходим из цикла, если все ссылки уже были посещены
+                var linkText = await linkElement.EvaluateFunctionAsync<string>("el => el.innerText");
+
+                if (!clickedLinks.Contains(linkText))
+                {
+                    await page.EvaluateFunctionAsync(@"(element) => {
+                    const y = element.getBoundingClientRect().top + window.pageYOffset;
+                    const duration = 1000; // Длительность анимации в миллисекундах
+                    const increment = 20; // Шаг прокрутки за один кадр
+
+                    const scrollToY = (to, duration) => {
+                        if (duration <= 0) return;
+                        const difference = to - window.pageYOffset;
+                        const perTick = difference / duration * increment;
+
+                        setTimeout(() => {
+                            window.scrollBy(0, perTick);
+                            if (window.pageYOffset === to) return;
+                            scrollToY(to, duration - increment);
+                        }, increment);
+                    }
+
+                    scrollToY(y, duration);
+                }", linkElement);
+
+                    await page.WaitForTimeoutAsync(1000);
+
+                    await linkElement.ClickAsync();
+
+                    clickedLinks.Add(linkText);
+
+                    await SimulateUserBehavior(page);
+
+                    await page.GoBackAsync();
+
+                    await page.WaitForTimeoutAsync(2000);
+
+                    break; // Прерываем цикл после успешного клика
+                }
             }
 
-            var randomLinkIndex = new Random().Next(0, remainingLinks.Count);
-            var randomLink = remainingLinks[randomLinkIndex];
+            // Если все ссылки уже были посещены, прокручиваем страницу
+            if (clickedLinks.Count == linkElements.Length)
+            {
+                await page.EvaluateFunctionAsync(@"() => {
+                const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+                const clientHeight = document.documentElement.clientHeight;
+                const duration = 3000; // Длительность анимации в миллисекундах
+                const increment = 20; // Шаг прокрутки за один кадр
 
-            clickedLinks.Add(randomLink);
+                const scrollToBottom = (duration) => {
+                    if (duration <= 0) return;
+                    const difference = scrollHeight - window.pageYOffset - clientHeight;
+                    const perTick = difference / duration * increment;
 
-            await page.EvaluateFunctionAsync(@"(element) => {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }", randomLink);
+                    setTimeout(() => {
+                        window.scrollBy(0, perTick);
+                        if (window.pageYOffset + clientHeight === scrollHeight) return;
+                        scrollToBottom(duration - increment);
+                    }, increment);
+                }
 
-            await page.WaitForTimeoutAsync(1000);
+                scrollToBottom(duration);
+            }");
 
-            await randomLink.ClickAsync();
-
-            await SimulateUserBehavior(page);
-
-            await page.GoBackAsync();
-
-            await page.WaitForTimeoutAsync(2000);
+                // Ждем, пока страница прокрутится и новые элементы загрузятся
+                await page.WaitForTimeoutAsync(3000);
+            }
         }
     }
+
 
     private async Task SimulateUserBehavior(IPage page)
     {
