@@ -37,8 +37,8 @@ public class SearchBot
         {
             if (profile is null) continue;
 
-            using (browser = await BrowserManager.ConnectBrowser(profile.UserId))
-            {
+            browser = await BrowserManager.ConnectBrowser(profile.UserId);
+            
                 if (browser == null)
                 {
                     Console.WriteLine($"Failed to connect browser for profile {profile.UserId}.");
@@ -60,9 +60,10 @@ public class SearchBot
                 //await page.GoToAsync("https://www.google.com");
 
 
+                Random random = new Random();
+                int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
 
-
-                for (int i = 0; i < configuration?.RepeatCount; i++)
+                for (int i = 0; i < randomVisitCount; i++)
                 {
                     string searchQuery = GetRandomSearchQuery();
                     await PerformSearch(page, searchQuery);
@@ -71,7 +72,7 @@ public class SearchBot
                     await ClickRandomLink(page);
 
                 }
-            }
+            
 
             var pages = await browser.PagesAsync();
 
@@ -79,6 +80,9 @@ public class SearchBot
             {
                 await pages[i].CloseAsync();
             }
+
+            if(browser != null)
+                await browser.CloseAsync();
         }
     }
 
@@ -92,6 +96,10 @@ public class SearchBot
         for (int i = 0; i < inputValue.Length; i++)
         {
             await page.Keyboard.PressAsync("Backspace");
+
+            Random randomDelay = new Random();
+            int typeDelay = randomDelay.Next(200, 700);
+            await page.WaitForTimeoutAsync(typeDelay);
         }
 
         await page.TypeAsync("input[name='q']", searchQuery);
@@ -182,7 +190,8 @@ public class SearchBot
         var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
 
         var scrollStep = 150;
-        var scrollDelay = 300; // Задержка между прокруткой
+
+         // Задержка между прокруткой
 
         if (direction == ScrollDirection.Down)
         {
@@ -193,6 +202,8 @@ public class SearchBot
                 window.scrollBy(0, scrollStep);
             }", scrollStep);
 
+                Random randomDelay = new Random();
+                int scrollDelay = randomDelay.Next(200, 1000);
                 await page.WaitForTimeoutAsync(scrollDelay);
             }
         }
@@ -205,6 +216,8 @@ public class SearchBot
                 window.scrollBy(0, -scrollStep);
             }", scrollStep);
 
+                Random randomDelay = new Random();
+                int scrollDelay = randomDelay.Next(200, 1000);
                 await page.WaitForTimeoutAsync(scrollDelay);
             }
         }
