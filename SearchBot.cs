@@ -18,7 +18,7 @@ public class SearchBot
     private static readonly Random random = new Random();
 
     private ConfigurationModel? configuration;
-
+    Browser browser = null;
     public async Task Run()
     {
         LoadConfiguration();
@@ -37,7 +37,7 @@ public class SearchBot
         {
             if (profile is null) continue;
 
-            using (var browser = await BrowserManager.ConnectBrowser(profile.UserId))
+            using (browser = await BrowserManager.ConnectBrowser(profile.UserId))
             {
                 if (browser == null)
                 {
@@ -70,27 +70,28 @@ public class SearchBot
 
                     await ClickRandomLink(page);
 
-
-
-
-                    //await ScrollPageSmoothly(page);
-                    //await ScrollPageSmoothly(page, true);
-                    //await ReturnToGoogleSearch(page);
                 }
+            }
+
+            var pages = await browser.PagesAsync();
+
+            for (int i = pages.Length - 1; i > 0; i--)
+            {
+                await pages[i].CloseAsync();
             }
         }
     }
 
-
     private async Task PerformSearch(IPage page, string searchQuery)
     {
-        //await page.GoToAsync("https://www.google.com");
         await page.WaitForSelectorAsync("input[name='q']");
+        await page.FocusAsync("input[name='q']");
+        await page.Keyboard.PressAsync("End");
+        await page.Keyboard.PressAsync("Backspace");
         await page.TypeAsync("input[name='q']", searchQuery);
         await page.Keyboard.PressAsync("Enter");
-
-        // Добавьте код для ожидания загрузки страницы результатов поиска, если необходимо
     }
+
 
     private async Task ClickRandomLink(IPage page)
     {
@@ -130,7 +131,6 @@ public class SearchBot
             await page.WaitForTimeoutAsync(2000);
         }
     }
-
 
     private async Task SimulateUserBehavior(IPage page)
     {
@@ -203,27 +203,11 @@ public class SearchBot
         }
     }
 
-
-
     private enum ScrollDirection
     {
         Up,
         Down
     }
-
-
-    //private async Task ScrollPageSmoothly(IPage page, bool scrollUp = false)
-    //{
-    //    int scrollDistance = scrollUp ? -1000 : 1000;
-    //    await page.EvaluateExpressionAsync($"window.scrollBy(0, {scrollDistance});");
-    //    await page.WaitForTimeoutAsync(1000);
-    //}
-
-    //private async Task ReturnToGoogleSearch(IPage page)
-    //{
-    //    await page.GoToAsync("https://www.google.com");
-    //    await page.WaitForTimeoutAsync(2000);
-    //}
 
     private void LoadConfiguration()
     {
@@ -244,35 +228,10 @@ public class SearchBot
         return queries[randomIndex];
     }
 
-    private async Task PerformSearch(ChromeDriver driver, string searchQuery)
-    {
-        driver.Navigate().GoToUrl("https://www.google.com");
-        IWebElement searchBox = driver.FindElement(By.CssSelector("input[name='q']"));
-        searchBox.Clear();
-        searchBox.SendKeys(searchQuery);
-        searchBox.Submit();
-
-        // Добавьте код для ожидания загрузки страницы результатов поиска, если необходимо
-    }
-
     private async Task SpendRandomTime()
     {
         int time = random.Next(configuration.MinTimeSpent, configuration.MaxTimeSpent + 1);
         await Task.Delay(time * 1000);
     }
 
-    private async Task ScrollPageSmoothly(ChromeDriver driver, bool scrollUp = false)
-    {
-        Actions actions = new Actions(driver);
-        int scrollDistance = scrollUp ? -1000 : 1000;
-        actions.MoveByOffset(0, scrollDistance);
-        actions.Perform();
-        await Task.Delay(1000);
-    }
-
-    private async Task ReturnToGoogleSearch(ChromeDriver driver)
-    {
-        driver.Navigate().GoToUrl("https://www.google.com");
-        await Task.Delay(2000);
-    }
 }
