@@ -106,105 +106,149 @@ public class SearchBot
         }
     }
 
-
     private async Task PerformSearch(IPage page, string searchQuery)
     {
-        await page.WaitForSelectorAsync("input[name='q']");
-        await page.FocusAsync("input[name='q']");
-        await page.Keyboard.PressAsync("End");
-
-        var inputValue = await page.EvaluateExpressionAsync<string>("document.querySelector('input[name=\"q\"]').value");
-        for (int i = 0; i < inputValue.Length; i++)
+        try
         {
-            await page.Keyboard.PressAsync("Backspace");
+            await page.WaitForSelectorAsync("input[name='q']");
+            await page.FocusAsync("input[name='q']");
+            await page.Keyboard.PressAsync("End");
 
-            Random randomDelay = new Random();
-            int typeDelay = randomDelay.Next(200, 700);
-            await page.WaitForTimeoutAsync(typeDelay);
+            var inputValue = await page.EvaluateExpressionAsync<string>("document.querySelector('input[name=\"q\"]').value");
+            for (int i = 0; i < inputValue.Length; i++)
+            {
+                try
+                {
+                    await page.Keyboard.PressAsync("Backspace");
+
+                    Random randomDelay = new Random();
+                    int typeDelay = randomDelay.Next(200, 700);
+                    await page.WaitForTimeoutAsync(typeDelay);
+                }
+                catch (Exception ex)
+                {
+                    // Обработка ошибок, возникающих при удалении символов
+                    
+                    // Логирование ошибки или предпринятие других действий по обработке ошибки
+                }
+            }
+
+            await page.TypeAsync("input[name='q']", searchQuery);
+            await page.Keyboard.PressAsync("Enter");
         }
-
-        await page.TypeAsync("input[name='q']", searchQuery);
-        await page.Keyboard.PressAsync("Enter");
+        catch (Exception ex)
+        {
+            // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
+            
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
+        }
     }
 
     private async Task ClickRandomLink(IPage page)
     {
-        var clickedLinks = new List<string>();
-        int maxSiteVisitCount = configuration.MaxSiteVisitCount;
-
-        while (clickedLinks.Count < maxSiteVisitCount)
+        try
         {
-            var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
+            var clickedLinks = new List<string>();
+            int maxSiteVisitCount = configuration.MaxSiteVisitCount;
 
-            foreach (var linkElement in linkElements)
+            while (clickedLinks.Count < maxSiteVisitCount)
             {
-                var linkText = await linkElement.EvaluateFunctionAsync<string>("el => el.innerText");
-
-                if (!clickedLinks.Contains(linkText))
+                try
                 {
-                    await page.EvaluateFunctionAsync(@"(element) => {
-                    const y = element.getBoundingClientRect().top + window.pageYOffset;
-                    const duration = 1000; // Длительность анимации в миллисекундах
-                    const increment = 20; // Шаг прокрутки за один кадр
+                    var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
 
-                    const scrollToY = (to, duration) => {
-                        if (duration <= 0) return;
-                        const difference = to - window.pageYOffset;
-                        const perTick = difference / duration * increment;
+                    foreach (var linkElement in linkElements)
+                    {
+                        try
+                        {
+                            var linkText = await linkElement.EvaluateFunctionAsync<string>("el => el.innerText");
 
-                        setTimeout(() => {
-                            window.scrollBy(0, perTick);
-                            if (window.pageYOffset === to) return;
-                            scrollToY(to, duration - increment);
-                        }, increment);
+                            if (!clickedLinks.Contains(linkText))
+                            {
+                                await page.EvaluateFunctionAsync(@"(element) => {
+                                const y = element.getBoundingClientRect().top + window.pageYOffset;
+                                const duration = 1000; // Длительность анимации в миллисекундах
+                                const increment = 20; // Шаг прокрутки за один кадр
+
+                                const scrollToY = (to, duration) => {
+                                    if (duration <= 0) return;
+                                    const difference = to - window.pageYOffset;
+                                    const perTick = difference / duration * increment;
+
+                                    setTimeout(() => {
+                                        window.scrollBy(0, perTick);
+                                        if (window.pageYOffset === to) return;
+                                        scrollToY(to, duration - increment);
+                                    }, increment);
+                                }
+
+                                scrollToY(y, duration);
+                            }", linkElement);
+
+                                await page.WaitForTimeoutAsync(2000);
+
+                                await linkElement.ClickAsync();
+
+                                clickedLinks.Add(linkText);
+
+                                await SimulateUserBehavior(page);
+
+                                await page.GoBackAsync();
+
+                                await page.WaitForTimeoutAsync(2000);
+
+                                break; // Прерываем цикл после успешного клика
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Обработка ошибок, возникающих при обработке каждой ссылки
+                            continue;
+                            // Логирование ошибки или предпринятие других действий по обработке ошибки
+                        }
                     }
 
-                    scrollToY(y, duration);
-                }", linkElement);
+                    // Если все ссылки уже были посещены, прокручиваем страницу
+                    if (clickedLinks.Count == linkElements.Length)
+                    {
+                        await page.EvaluateFunctionAsync(@"() => {
+                        const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+                        const clientHeight = document.documentElement.clientHeight;
+                        const duration = 3000; // Длительность анимации в миллисекундах
+                        const increment = 20; // Шаг прокрутки за один кадр
 
-                    await page.WaitForTimeoutAsync(2000);
+                        const scrollToBottom = (duration) => {
+                            if (duration <= 0) return;
+                            const difference = scrollHeight - window.pageYOffset - clientHeight;
+                            const perTick = difference / duration * increment;
 
-                    await linkElement.ClickAsync();
+                            setTimeout(() => {
+                                window.scrollBy(0, perTick);
+                                if (window.pageYOffset + clientHeight === scrollHeight) return;
+                                scrollToBottom(duration - increment);
+                            }, increment);
+                        }
 
-                    clickedLinks.Add(linkText);
+                        scrollToBottom(duration);
+                    }");
 
-                    await SimulateUserBehavior(page);
-
-                    await page.GoBackAsync();
-
-                    await page.WaitForTimeoutAsync(2000);
-
-                    break; // Прерываем цикл после успешного клика
+                        // Ждем, пока страница прокрутится и новые элементы загрузятся
+                        await page.WaitForTimeoutAsync(3000);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Обработка ошибок, возникающих при обработке списка ссылок
+                    continue;
+                    // Логирование ошибки или предпринятие других действий по обработке ошибки
                 }
             }
-
-            // Если все ссылки уже были посещены, прокручиваем страницу
-            if (clickedLinks.Count == linkElements.Length)
-            {
-                await page.EvaluateFunctionAsync(@"() => {
-                const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
-                const clientHeight = document.documentElement.clientHeight;
-                const duration = 3000; // Длительность анимации в миллисекундах
-                const increment = 20; // Шаг прокрутки за один кадр
-
-                const scrollToBottom = (duration) => {
-                    if (duration <= 0) return;
-                    const difference = scrollHeight - window.pageYOffset - clientHeight;
-                    const perTick = difference / duration * increment;
-
-                    setTimeout(() => {
-                        window.scrollBy(0, perTick);
-                        if (window.pageYOffset + clientHeight === scrollHeight) return;
-                        scrollToBottom(duration - increment);
-                    }, increment);
-                }
-
-                scrollToBottom(duration);
-            }");
-
-                // Ждем, пока страница прокрутится и новые элементы загрузятся
-                await page.WaitForTimeoutAsync(3000);
-            }
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибок, возникающих при выполнении операций внутри метода ClickRandomLink
+            
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
 
