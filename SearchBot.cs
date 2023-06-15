@@ -395,17 +395,28 @@ public class SearchBot
     }
 
     private string GetRandomSearchQuery()
-    {        
-        string[] queries = configuration.SearchQueries?.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-        if (queries.Length == 0)
+    {
+        try
         {
-            Console.WriteLine("No search queries found in configuration.");
-            return string.Empty;
-        }
+            string[] queries = configuration.SearchQueries?.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (queries.Length == 0)
+            {
+                Console.WriteLine("No search queries found in configuration.");
+                return string.Empty;
+            }
 
-        int randomIndex = random.Next(queries.Length);
-        return queries[randomIndex];
+            int randomIndex = random.Next(queries.Length);
+            return queries[randomIndex];
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибки при получении случайного поискового запроса
+           
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
+            return string.Empty; // Возвращаем пустую строку или другое значение по умолчанию в случае ошибки
+        }
     }
+
 
     private async Task SpendRandomTime()
     {
