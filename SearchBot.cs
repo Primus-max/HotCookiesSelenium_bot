@@ -400,8 +400,7 @@ public class SearchBot
         {
             string[] queries = configuration.SearchQueries?.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
             if (queries.Length == 0)
-            {
-                Console.WriteLine("No search queries found in configuration.");
+            {                
                 return string.Empty;
             }
 
@@ -417,11 +416,20 @@ public class SearchBot
         }
     }
 
-
     private async Task SpendRandomTime()
     {
-        int time = random.Next(configuration.MinTimeSpent, configuration.MaxTimeSpent + 1);
-        await Task.Delay(time * 1000);
+        try
+        {
+            int time = random.Next(configuration.MinTimeSpent, configuration.MaxTimeSpent + 1);
+            await Task.Delay(time * 1000);
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибки при ожидании задержки
+            
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
+        }
     }
+
 
 }
