@@ -87,10 +87,17 @@ public class SearchBot
         await page.WaitForSelectorAsync("input[name='q']");
         await page.FocusAsync("input[name='q']");
         await page.Keyboard.PressAsync("End");
-        await page.Keyboard.PressAsync("Backspace");
+
+        var inputValue = await page.EvaluateExpressionAsync<string>("document.querySelector('input[name=\"q\"]').value");
+        for (int i = 0; i < inputValue.Length; i++)
+        {
+            await page.Keyboard.PressAsync("Backspace");
+        }
+
         await page.TypeAsync("input[name='q']", searchQuery);
         await page.Keyboard.PressAsync("Enter");
     }
+
 
 
     private async Task ClickRandomLink(IPage page)
