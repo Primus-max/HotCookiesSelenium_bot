@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+EpN2hDkhHBoL3jK75LipD5h3JG0El3cB3UeRmsLUgBe2UYp42Msfg/TBJ6fD6NxkhxKnKV+MNbCGGdxFE85tg==",
+  "dgSpecHash": "h0vDYmjwZsHmLeeT8z/kW8RAjt+khgi6sMLbhQ3Y4AieH7yE2ktCwbpG7eSGvPKnqSoU0SQfL1HFrg26RxbM2Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\Goga\\Desktop\\HotCookies\\HotCookies.csproj",
   "expectedPackageFiles": [
@@ -17,6 +17,8 @@
     "C:\\Users\\Goga\\.nuget\\packages\\selenium.support\\4.10.0\\selenium.support.4.10.0.nupkg.sha512",
     "C:\\Users\\Goga\\.nuget\\packages\\selenium.webdriver\\4.10.0\\selenium.webdriver.4.10.0.nupkg.sha512",
     "C:\\Users\\Goga\\.nuget\\packages\\selenium.webdriver.chromedriver\\112.0.5615.4900\\selenium.webdriver.chromedriver.112.0.5615.4900.nupkg.sha512",
+    "C:\\Users\\Goga\\.nuget\\packages\\serilog\\2.12.0\\serilog.2.12.0.nupkg.sha512",
+    "C:\\Users\\Goga\\.nuget\\packages\\serilog.sinks.file\\5.0.0\\serilog.sinks.file.5.0.0.nupkg.sha512",
     "C:\\Users\\Goga\\.nuget\\packages\\system.buffers\\4.5.0\\system.buffers.4.5.0.nupkg.sha512",
     "C:\\Users\\Goga\\.nuget\\packages\\system.memory\\4.5.1\\system.memory.4.5.1.nupkg.sha512",
     "C:\\Users\\Goga\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",

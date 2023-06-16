@@ -63,3 +63,5 @@ C:\Users\Goga\Desktop\HotCookies\bin\Debug\net6.0-windows\Microsoft.Extensions.O
 C:\Users\Goga\Desktop\HotCookies\bin\Debug\net6.0-windows\Microsoft.Extensions.Primitives.dll
 C:\Users\Goga\Desktop\HotCookies\bin\Debug\net6.0-windows\Microsoft.Net.Http.Headers.dll
 C:\Users\Goga\Desktop\HotCookies\bin\Debug\net6.0-windows\PuppeteerSharp.dll
+C:\Users\Goga\Desktop\HotCookies\bin\Debug\net6.0-windows\Serilog.dll
+C:\Users\Goga\Desktop\HotCookies\bin\Debug\net6.0-windows\Serilog.Sinks.File.dll

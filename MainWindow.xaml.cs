@@ -57,32 +57,6 @@ namespace HotCookies
                 await searchBot.Run();
             }
 
-
-            //Task task1 = Task.Run(async () =>
-            //{
-            //    SearchBot searchBot1 = new SearchBot();
-            //    await Task.Delay(TimeSpan.FromSeconds(1)); // Задержка 1 секунда
-            //    await searchBot1.Run();
-            //});
-
-            //Task task2 = Task.Run(async () =>
-            //{
-            //    SearchBot searchBot2 = new SearchBot();
-            //    await Task.Delay(TimeSpan.FromSeconds(1)); // Задержка 1 секунда
-            //    await searchBot2.Run();
-            //});
-
-            //Task task3 = Task.Run(async () =>
-            //{
-            //    SearchBot searchBot3 = new SearchBot();
-            //    await Task.Delay(TimeSpan.FromSeconds(1)); // Задержка 1 секунда
-            //    await searchBot3.Run();
-            //});
-
-            //await Task.WhenAll(task1, task2, task3);
-
-
-
         }
 
         // Загружаю и устанавливаю в поля конфигурационные данные

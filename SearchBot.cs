@@ -5,6 +5,8 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Remote;
 using PuppeteerSharp;
+using Serilog;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,8 +25,15 @@ public class SearchBot
     Browser browser = null;
     private static readonly SemaphoreSlim serverSemaphore = new SemaphoreSlim(1, 1);
 
+    private static readonly ILogger logger = Log.ForContext<SearchBot>();
+
+
+    // Настройка логгера
+
     public async Task Run()
     {
+        SetupLogger();
+
         try
         {
             LoadConfiguration();
@@ -56,6 +65,8 @@ public class SearchBot
                         {
                             return;
                         }
+                                            
+
 
                         var page = await browser.NewPageAsync();
                         await page.GoToAsync("https://www.google.com");
@@ -70,29 +81,41 @@ public class SearchBot
                             await ClickRandomLink(page);
 
                             await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием страницы
-                            await page.CloseAsync();
+                            //await page.CloseAsync();
                             serverSemaphore.Release(); // Освобождаем доступ к серверу
                         }
 
                         await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием браузера
+                        var pages = await browser.PagesAsync();
+                        foreach (var p in pages)
+                        {
+                            await p.CloseAsync();
+                            await page.WaitForTimeoutAsync(500);
+                        }
+                        await page.WaitForTimeoutAsync(500);
                         await browser.CloseAsync();
+
                         serverSemaphore.Release(); // Освобождаем доступ к серверу
                     }
                     catch (Exception ex)
                     {
-                        // Обработка ошибок
+                        logger.Error($"Произошла ошибка в методе Run {ex}");
+                        // Обработка ошибок                        
                     }
                 }));
             }
 
             await Task.WhenAll(tasks);
+
+            
         }
         catch (Exception ex)
         {
             // Обработка ошибок
+            logger.Error($"Произошла ошибка в методе Run {ex}");
         }
     }
-
+    
     private async Task PerformSearch(IPage page, string searchQuery)
     {
         try
@@ -113,10 +136,8 @@ public class SearchBot
                     await page.WaitForTimeoutAsync(typeDelay);
                 }
                 catch (Exception ex)
-                {
-                    // Обработка ошибок, возникающих при удалении символов
-                    MessageBox.Show($"Ошибка в методе PerformSearch {ex.Message}");
-                    // Логирование ошибки или предпринятие других действий по обработке ошибки
+                {                    
+                    logger.Error($"Ошибка в методе PerformSearch {ex}");                    
                 }
             }
 
@@ -126,14 +147,14 @@ public class SearchBot
                 await page.Keyboard.PressAsync("Enter");
             }
             catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка в методе PerformSearch {ex.Message}");
+            {                
+                logger.Error($"Ошибка в методе PerformSearch {ex}");
             }
         }
         catch (Exception ex)
         {
             // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
-            MessageBox.Show($"Ошибка в методе PerformSearch {ex.Message}");
+            logger.Error($"Ошибка в методе PerformSearch {ex}");
             // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
@@ -196,11 +217,12 @@ public class SearchBot
                         }
                         catch (Exception ex)
                         {
-                            // Обработка ошибок, возникающих при обработке каждой ссылки
-                            //MessageBox.Show($"Ошибка в методе ClickRandomLink {ex.Message}");
+                            logger.Error($"Ошибка в методе ClickRandomLink {ex}");
+                            await page.ReloadAsync();
+                            await page.WaitForTimeoutAsync(10000);
+
                             linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
-                            continue;
-                            // Логирование ошибки или предпринятие других действий по обработке ошибки
+                             continue;                            
                         }
                     }
 
@@ -234,8 +256,9 @@ public class SearchBot
                 }
                 catch (Exception ex)
                 {
-                    // Обработка ошибок, возникающих при обработке списка ссылок
-                    //MessageBox.Show($"Ошибка в методе ClickRandomLink {ex.Message}");
+                    logger.Error($"Ошибка в методе ClickRandomLink {ex}");
+                    await page.ReloadAsync();
+                    await page.WaitForTimeoutAsync(10000);
                     continue;
                     // Логирование ошибки или предпринятие других действий по обработке ошибки
                 }
@@ -243,8 +266,7 @@ public class SearchBot
         }
         catch (Exception ex)
         {
-            // Обработка ошибок, возникающих при выполнении операций внутри метода ClickRandomLink
-            //MessageBox.Show($"Ошибка в методе ClickRandomLink {ex.Message}");
+            logger.Error($"Ошибка в методе ClickRandomLink {ex}");
             return;
             // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
@@ -286,7 +308,7 @@ public class SearchBot
                 catch (Exception ex)
                 {
                     // Обработка ошибок, возникающих при симуляции поведения пользователя
-                    MessageBox.Show($"Ошибка в методе SimulateUserBehavior {ex.Message}");
+                    logger.Error($"Ошибка в методе SimulateUserBehavior {ex}");
                     continue;
                     // Логирование ошибки или предпринятие других действий по обработке ошибки
                 }
@@ -295,7 +317,7 @@ public class SearchBot
         catch (Exception ex)
         {
             // Обработка ошибок, возникающих при выполнении операций внутри метода SimulateUserBehavior
-            MessageBox.Show($"Ошибка в методе SimulateUserBehavior {ex.Message}");
+            logger.Error($"Ошибка в методе SimulateUserBehavior {ex}");
             // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
@@ -335,7 +357,7 @@ public class SearchBot
                     catch (Exception ex)
                     {
                         // Обработка ошибок, возникающих при прокрутке страницы вниз
-                        MessageBox.Show($"Ошибка в методе ScrollPageSmoothly {ex.Message}");
+                        logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
                         continue;
                         // Логирование ошибки или предпринятие других действий по обработке ошибки
                     }
@@ -358,7 +380,7 @@ public class SearchBot
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Ошибка в методе ScrollPageSmoothly {ex.Message}");
+                        logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
                         // Обработка ошибок, возникающих при прокрутке страницы вверх
                         continue;
                         // Логирование ошибки или предпринятие других действий по обработке ошибки
@@ -369,7 +391,7 @@ public class SearchBot
         catch (Exception ex)
         {
             // Обработка ошибок, возникающих при выполнении операций внутри метода ScrollPageSmoothly
-            MessageBox.Show($"Ошибка в методе ScrollPageSmoothly {ex.Message}");
+            logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
             // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
@@ -390,7 +412,7 @@ public class SearchBot
         catch (Exception ex)
         {
             // Обработка ошибки при загрузке и десериализации конфигурации
-            MessageBox.Show($"Ошибка в методе LoadConfiguration {ex.Message}");
+            logger.Error($"Ошибка в методе LoadConfiguration {ex}");
             // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
@@ -411,7 +433,7 @@ public class SearchBot
         catch (Exception ex)
         {
             // Обработка ошибки при получении случайного поискового запроса
-            MessageBox.Show($"Ошибка в методе GetRandomSearchQuery {ex.Message}");
+            logger.Error($"Ошибка в методе GetRandomSearchQuery {ex}");
             // Логирование ошибки или предпринятие других действий по обработке ошибки
             return string.Empty; // Возвращаем пустую строку или другое значение по умолчанию в случае ошибки
         }
@@ -426,11 +448,15 @@ public class SearchBot
         }
         catch (Exception ex)
         {
-            // Обработка ошибки при ожидании задержки
-            MessageBox.Show($"Ошибка в методе SpendRandomTime {ex.Message}");
+            logger.Error($"Ошибка в методе SpendRandomTime {ex}");
             // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
 
-
+    private void SetupLogger()
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.File("logs.txt") // Укажите путь к файлу логов
+            .CreateLogger();
+    }
 }

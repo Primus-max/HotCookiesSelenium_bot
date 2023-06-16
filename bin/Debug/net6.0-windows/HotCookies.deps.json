@@ -11,7 +11,9 @@
           "PuppeteerSharp": "10.0.0",
           "Selenium.Support": "4.10.0",
           "Selenium.WebDriver": "4.10.0",
-          "Selenium.WebDriver.ChromeDriver": "112.0.5615.4900"
+          "Selenium.WebDriver.ChromeDriver": "112.0.5615.4900",
+          "Serilog": "2.12.0",
+          "Serilog.Sinks.File": "5.0.0"
         },
         "runtime": {
           "HotCookies.dll": {}
@@ -148,6 +150,25 @@
         }
       },
       "Selenium.WebDriver.ChromeDriver/112.0.5615.4900": {},
+      "Serilog/2.12.0": {
+        "runtime": {
+          "lib/net6.0/Serilog.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.12.0.0"
+          }
+        }
+      },
+      "Serilog.Sinks.File/5.0.0": {
+        "dependencies": {
+          "Serilog": "2.12.0"
+        },
+        "runtime": {
+          "lib/net5.0/Serilog.Sinks.File.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      },
       "System.Buffers/4.5.0": {},
       "System.Memory/4.5.1": {},
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
@@ -254,6 +275,20 @@
       "sha512": "sha512-PjWk+/RzxDhnxsCKeprnHb4RRB+cE/ekMVrqdcmdPxNoK/rvfBZdxori5Fm+dh9BU080SLeOKrD8Mtah0HcwlQ==",
       "path": "selenium.webdriver.chromedriver/112.0.5615.4900",
       "hashPath": "selenium.webdriver.chromedriver.112.0.5615.4900.nupkg.sha512"
+    },
+    "Serilog/2.12.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xaiJLIdu6rYMKfQMYUZgTy8YK7SMZjB4Yk50C/u//Z4OsvxkUfSPJy4nknfvwAC34yr13q7kcyh4grbwhSxyZg==",
+      "path": "serilog/2.12.0",
+      "hashPath": "serilog.2.12.0.nupkg.sha512"
+    },
+    "Serilog.Sinks.File/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uwV5hdhWPwUH1szhO8PJpFiahqXmzPzJT/sOijH/kFgUx+cyoDTMM8MHD0adw9+Iem6itoibbUXHYslzXsLEAg==",
+      "path": "serilog.sinks.file/5.0.0",
+      "hashPath": "serilog.sinks.file.5.0.0.nupkg.sha512"
     },
     "System.Buffers/4.5.0": {
       "type": "package",

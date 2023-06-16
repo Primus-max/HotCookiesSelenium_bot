@@ -1,0 +1,26 @@
+2023-06-16 13:46:46.547 +08:00 [ERR] Ошибка в методе SimulateUserBehavior PuppeteerSharp.EvaluationFailedException: Evaluation failed: TypeError: Cannot read properties of null (reading 'scrollHeight')
+    at __puppeteer_evaluation_script__:1:15
+   at PuppeteerSharp.ExecutionContext.ExecuteEvaluationAsync(String method, Object args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 179
+   at PuppeteerSharp.ExecutionContext.RemoteObjectTaskToObject[T](Task`1 remote) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 146
+   at PuppeteerSharp.IsolatedWorld.EvaluateExpressionAsync[T](String script) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/IsolatedWorld.cs:line 188
+   at SearchBot.SimulateUserBehavior(IPage page) in C:\Users\Goga\Desktop\HotCookies\SearchBot.cs:line 291
+2023-06-16 13:52:47.733 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.PuppeteerException: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the Page has been closed.Close reason: Target.detachedFromTarget
+   at PuppeteerSharp.CDPSession.SendAsync(String method, Object args, Boolean waitForCallback) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 64
+   at PuppeteerSharp.CDPSession.SendAsync[T](String method, Object args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 55
+   at PuppeteerSharp.ExecutionContext.ExecuteEvaluationAsync(String method, Object args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 175
+   at PuppeteerSharp.ExecutionContext.EvaluateFunctionInternalAsync(Boolean returnByValue, String script, Object[] args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 161
+   at PuppeteerSharp.ExecutionContext.EvaluateFunctionHandleAsync(String script, Object[] args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 57
+   at PuppeteerSharp.CustomQueriesManager.<>c__DisplayClass13_0.<<MakeQueryHandler>b__2>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CustomQueriesManager.cs:line 167
+--- End of stack trace from previous location ---
+   at PuppeteerSharp.IsolatedWorld.QuerySelectorAllAsync(String selector) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/IsolatedWorld.cs:line 224
+   at SearchBot.ClickRandomLink(IPage page) in C:\Users\Goga\Desktop\HotCookies\SearchBot.cs:line 173
+2023-06-16 13:52:47.735 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.PuppeteerException: Protocol error (Runtime.callFunctionOn): Session closed. Most likely the Page has been closed.Close reason: Target.detachedFromTarget
+   at PuppeteerSharp.CDPSession.SendAsync(String method, Object args, Boolean waitForCallback) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 64
+   at PuppeteerSharp.CDPSession.SendAsync[T](String method, Object args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 55
+   at PuppeteerSharp.ExecutionContext.ExecuteEvaluationAsync(String method, Object args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 175
+   at PuppeteerSharp.ExecutionContext.EvaluateFunctionInternalAsync(Boolean returnByValue, String script, Object[] args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 161
+   at PuppeteerSharp.ExecutionContext.EvaluateFunctionHandleAsync(String script, Object[] args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/ExecutionContext.cs:line 57
+   at PuppeteerSharp.CustomQueriesManager.<>c__DisplayClass13_0.<<MakeQueryHandler>b__2>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CustomQueriesManager.cs:line 167
+--- End of stack trace from previous location ---
+   at PuppeteerSharp.IsolatedWorld.QuerySelectorAllAsync(String selector) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/IsolatedWorld.cs:line 224
+   at SearchBot.ClickRandomLink(IPage page) in C:\Users\Goga\Desktop\HotCookies\SearchBot.cs:line 173
