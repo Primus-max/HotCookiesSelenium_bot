@@ -4,6 +4,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Support.Extensions;
 using PuppeteerSharp;
 using Serilog;
 
@@ -38,7 +39,6 @@ public class SearchBot
         {
             LoadConfiguration();
 
-            
             await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
             List<Profile> profiles = await ProfileManager.GetProfiles();
             serverSemaphore.Release(); // Освобождаем доступ к серверу
@@ -61,56 +61,51 @@ public class SearchBot
                         if (profile is null) return;
 
                         await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
-                        var browser = await BrowserManager.ConnectBrowser(profile.UserId);
+                        var driver = await BrowserManager.ConnectBrowserAsync(profile.UserId);
                         serverSemaphore.Release(); // Освобождаем доступ к серверу
 
-                        if (browser == null)
+                        if (driver == null)
                         {
                             return;
                         }
-                                            
 
-
-                        var page = await browser.NewPageAsync();
-                        await page.GoToAsync("https://www.google.com");
-
-                        Random random = new Random();
+                        var random = new Random();
                         int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
 
                         for (int i = 0; i < randomVisitCount; i++)
                         {
-                            await PerformSearch(page, GetRandomSearchQuery());
-                            await SpendRandomTime();
-                            await ClickRandomLink(page);
+                            // Открыть новую вкладку
+                            driver.ExecuteJavaScript("window.open();");
+
+                            // Переключиться на новую вкладку
+                            driver.SwitchTo().Window(driver.WindowHandles.Last());
+
+                            // Перейти на сайт google.com
+                            driver.Url = "https://www.youtube.com";
+
+                            //await PerformSearch(driver, GetRandomSearchQuery());
+                            //await SpendRandomTime();
+                            //await ClickRandomLink(driver);
 
                             await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием страницы
-                            //await page.CloseAsync();
+                            await CloseBrowser(driver);
                             serverSemaphore.Release(); // Освобождаем доступ к серверу
                         }
 
                         await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием браузера
-                        var pages = await browser.PagesAsync();
-                        foreach (var p in pages)
-                        {
-                            await p.CloseAsync();
-                            await page.WaitForTimeoutAsync(500);
-                        }
-                        await page.WaitForTimeoutAsync(500);
-                        await browser.CloseAsync();
-
+                        driver.Quit();
                         serverSemaphore.Release(); // Освобождаем доступ к серверу
+                        return;
                     }
                     catch (Exception ex)
                     {
                         logger.Error($"Произошла ошибка в методе Run {ex}");
-                        // Обработка ошибок                        
+                        // Обработка ошибок
                     }
                 }));
             }
 
             await Task.WhenAll(tasks);
-
-            
         }
         catch (Exception ex)
         {
@@ -118,49 +113,67 @@ public class SearchBot
             logger.Error($"Произошла ошибка в методе Run {ex}");
         }
     }
-    
-    private async Task PerformSearch(IPage page, string searchQuery)
+
+    private async Task CloseBrowser(IWebDriver driver)
     {
-        try
+        // Получаем список идентификаторов всех открытых вкладок
+        var windowHandles = driver.WindowHandles;
+
+        // Закрываем каждую вкладку
+        foreach (var windowHandle in windowHandles)
         {
-            await page.WaitForSelectorAsync("input[name='q']");
-            await page.FocusAsync("input[name='q']");
-            await page.Keyboard.PressAsync("End");
-
-            var inputValue = await page.EvaluateExpressionAsync<string>("document.querySelector('input[name=\"q\"]').value");
-            for (int i = 0; i < inputValue.Length; i++)
-            {
-                try
-                {
-                    await page.Keyboard.PressAsync("Backspace");
-
-                    Random randomDelay = new Random();
-                    int typeDelay = randomDelay.Next(200, 700);
-                    await page.WaitForTimeoutAsync(typeDelay);
-                }
-                catch (Exception ex)
-                {                    
-                    logger.Error($"Ошибка в методе PerformSearch {ex}");                    
-                }
-            }
-
-            try
-            {
-                await page.TypeAsync("input[name='q']", searchQuery);
-                await page.Keyboard.PressAsync("Enter");
-            }
-            catch (Exception ex)
-            {                
-                logger.Error($"Ошибка в методе PerformSearch {ex}");
-            }
+            driver.SwitchTo().Window(windowHandle);
+            driver.Close();
         }
-        catch (Exception ex)
-        {
-            // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
-            logger.Error($"Ошибка в методе PerformSearch {ex}");
-            // Логирование ошибки или предпринятие других действий по обработке ошибки
-        }
+
+        // Закрываем драйвер
+        driver.Quit();
     }
+
+
+    //private async Task PerformSearch(IWebDriver page, string searchQuery)
+    //{
+    //    try
+    //    {
+    //        await page.WaitForSelectorAsync("input[name='q']");
+    //        await page.FocusAsync("input[name='q']");
+    //        await page.Keyboard.PressAsync("End");
+
+    //        var inputValue = await page.EvaluateExpressionAsync<string>("document.querySelector('input[name=\"q\"]').value");
+    //        for (int i = 0; i < inputValue.Length; i++)
+    //        {
+    //            try
+    //            {
+    //                await page.Keyboard.PressAsync("Backspace");
+
+    //                Random randomDelay = new Random();
+    //                int typeDelay = randomDelay.Next(200, 700);
+    //                await page.WaitForTimeoutAsync(typeDelay);
+    //            }
+    //            catch (Exception ex)
+    //            {                    
+    //                logger.Error($"Ошибка в методе PerformSearch {ex}");                    
+    //            }
+    //        }
+
+    //        try
+    //        {
+    //            await page.TypeAsync("input[name='q']", searchQuery);
+    //            await page.Keyboard.PressAsync("Enter");
+    //            await page.WaitForTimeoutAsync(2000);
+    //        }
+    //        catch (Exception ex)
+    //        {                
+    //            logger.Error($"Ошибка в методе PerformSearch {ex}");
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
+    //        logger.Error($"Ошибка в методе PerformSearch {ex}");
+    //        // Логирование ошибки или предпринятие других действий по обработке ошибки
+    //    }
+    //}
 
     private async Task ClickRandomLink(IPage page)
     {
@@ -174,6 +187,10 @@ public class SearchBot
                 try
                 {
                     var linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
+                    if (linkElements.Length == 0)
+                    {
+                        //await PerformSearch(page, GetRandomSearchQuery());
+                    }
 
                     foreach (var linkElement in linkElements)
                     {
@@ -203,29 +220,88 @@ public class SearchBot
                                 scrollToY(y, duration);
                             }", linkElement);
 
-                                await page.WaitForTimeoutAsync(2000);
+                                await page.WaitForTimeoutAsync(5000);
 
                                 await linkElement.ClickAsync();
 
                                 clickedLinks.Add(linkText);
 
-                                await SimulateUserBehavior(page);
+                               // await SimulateUserBehavior(page);
 
-                                await page.GoBackAsync();
 
-                                await page.WaitForTimeoutAsync(10000);
+                                //try
+                                //{
+                                //    await page.GoToAsync("https://www.google.com");
+                                //}
+                                //catch (Exception)
+                                //{
+
+                                //    MessageBox.Show($"НЕ МОГУ ПЕРЕЙТИ!");
+                                //}
+
+                                //await page.WaitForTimeoutAsync(10000);
+
+                                //if (!page.IsClosed)
+                                //{
+                                //    await page.GoBackAsync();
+                                //}
+                                //else
+                                //{
+                                //    MessageBox.Show($"Потерял связь с реальностью");
+                                //}
+                                //await page.WaitForTimeoutAsync(10000);
+                                //try
+                                //{
+                                //    await page.GoBackAsync();
+                                //}
+                                //catch (Exception ex)
+                                //{
+
+                                //}
+
+
+                                page.DefaultNavigationTimeout = 50000;
+                                try
+                                {
+                                    await page.GoBackAsync();
+                                }
+                                catch (Exception)
+                                {
+                                    await page.GoToAsync("https://activity.adspower.com");
+                                }
+                              
+                                //int maxRetries = 10;
+                                //int retryCount = 0;
+
+                                //while (retryCount < maxRetries)
+                                //{
+                                //    try
+                                //    {
+                                //        await page.GoBackAsync();
+                                //        break; // Если успешно, выходим из цикла
+                                //    }
+                                //    catch (Exception)
+                                //    {                                        
+                                //        retryCount++;
+                                //    }
+                                //}
+
+                                //if (retryCount == maxRetries)
+                                //{
+                                   
+                                //}
+
+                                await page.WaitForTimeoutAsync(20000);
 
                                 break;
                             }
                         }
                         catch (Exception ex)
                         {
-                            logger.Error($"Ошибка в методе ClickRandomLink {ex}");
-                            await page.ReloadAsync();
-                            await page.WaitForTimeoutAsync(10000);
-
-                            linkElements = await page.QuerySelectorAllAsync(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr");
-                             continue;                            
+                            // проверить Navigation failed because browser has disconnected!
+                            // проверить Session closed. Most likely the Page has been closed.Close reason
+                            logger.Error($"Ошибка в методе ClickRandomLink {ex}");                                                        
+                            return;                            
                         }
                     }
 
@@ -259,9 +335,7 @@ public class SearchBot
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"Ошибка в методе ClickRandomLink {ex}");
-                    await page.ReloadAsync();
-                    await page.WaitForTimeoutAsync(10000);
+                    logger.Error($"Ошибка в методе ClickRandomLink {ex}");                    
                     continue;
                     // Логирование ошибки или предпринятие других действий по обработке ошибки
                 }
@@ -278,8 +352,8 @@ public class SearchBot
     private async Task SimulateUserBehavior(IPage page)
     {
         try
-        {                     
-            await page.WaitForTimeoutAsync(10000);
+        {
+            await page.WaitForTimeoutAsync(20000);
 
             int minTimeSpent = configuration.MinTimeSpent;
             int maxTimeSpent = configuration.MaxTimeSpent;
@@ -298,13 +372,13 @@ public class SearchBot
                     if (currentScroll + windowHeight >= scrollHeight)
                     {
                         // Достигнут нижний конец страницы, прокручиваем вверх
-                        await ScrollPageSmoothly(page, ScrollDirection.Up);
+                        //await ScrollPageSmoothly(page, ScrollDirection.Up);
                         await page.WaitForTimeoutAsync(1000); // Добавляем небольшую задержку между прокрутками
                     }
                     else
                     {
                         // Продолжаем прокручивать вниз
-                        await ScrollPageSmoothly(page, ScrollDirection.Down);
+                        //await ScrollPageSmoothly(page, ScrollDirection.Down);
                         await page.WaitForTimeoutAsync(1500); // Добавляем небольшую задержку между прокрутками
                     }
                 }
@@ -321,7 +395,6 @@ public class SearchBot
         {
             // Обработка ошибок, возникающих при выполнении операций внутри метода SimulateUserBehavior
             logger.Error($"Ошибка в методе SimulateUserBehavior {ex}");
-            // Логирование ошибки или предпринятие других действий по обработке ошибки
         }
     }
 
@@ -329,11 +402,7 @@ public class SearchBot
     {
         try
         {
-            if (page.IsClosed)
-            {
-                return; // Прекращаем выполнение, если страница закрыта
-            }
-
+            
             var scrollHeight = await page.EvaluateExpressionAsync<int>("document.body.scrollHeight");
             var windowHeight = await page.EvaluateExpressionAsync<int>("window.innerHeight");
             var currentScroll = await page.EvaluateExpressionAsync<int>("window.scrollY");
@@ -361,8 +430,7 @@ public class SearchBot
                     {
                         // Обработка ошибок, возникающих при прокрутке страницы вниз
                         logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
-                        continue;
-                        // Логирование ошибки или предпринятие других действий по обработке ошибки
+                        continue;                       
                     }
                 }
             }
@@ -383,19 +451,15 @@ public class SearchBot
                     }
                     catch (Exception ex)
                     {
-                        logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
-                        // Обработка ошибок, возникающих при прокрутке страницы вверх
-                        continue;
-                        // Логирование ошибки или предпринятие других действий по обработке ошибки
+                        logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");                        
+                        continue;                        
                     }
                 }
             }
         }
         catch (Exception ex)
-        {
-            // Обработка ошибок, возникающих при выполнении операций внутри метода ScrollPageSmoothly
-            logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
-            // Логирование ошибки или предпринятие других действий по обработке ошибки
+        {           
+            logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");         
         }
     }
 
@@ -434,11 +498,9 @@ public class SearchBot
             return queries[randomIndex];
         }
         catch (Exception ex)
-        {
-            // Обработка ошибки при получении случайного поискового запроса
-            logger.Error($"Ошибка в методе GetRandomSearchQuery {ex}");
-            // Логирование ошибки или предпринятие других действий по обработке ошибки
-            return string.Empty; // Возвращаем пустую строку или другое значение по умолчанию в случае ошибки
+        {           
+            logger.Error($"Ошибка в методе GetRandomSearchQuery {ex}");            
+            return string.Empty; 
         }
     }
 
@@ -461,5 +523,20 @@ public class SearchBot
         Log.Logger = new LoggerConfiguration()
             .WriteTo.File("logs.txt") // Укажите путь к файлу логов
             .CreateLogger();
+    }
+
+    private async Task ClosePagesAndBrowser(IPage page)
+    {
+        await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием браузера
+        var pages = await browser.PagesAsync();
+        foreach (var p in pages)
+        {
+            await p.CloseAsync();
+            await page.WaitForTimeoutAsync(500);
+        }
+        await page.WaitForTimeoutAsync(500);
+        await browser.CloseAsync();
+
+        serverSemaphore.Release(); // Освобождаем доступ к серверу
     }
 }

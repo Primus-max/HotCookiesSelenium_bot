@@ -1,92 +1,62 @@
-2023-06-17 10:07:00.309 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.TargetClosedException: Navigation failed because browser has disconnected! (Connection failed to process Runtime.executionContextCreated. Frame 6A9014FDE5BFE905A976701D71A06EBC not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
+2023-06-17 20:07:59.891 +08:00 [ERR] Произошла ошибка в методе Run PuppeteerSharp.PuppeteerException: Protocol error (Performance.enable): Session closed. Most likely the Page has been closed.Close reason: The remote party closed the WebSocket connection without completing the close handshake.
+   at PuppeteerSharp.CDPSession.SendAsync(String method, Object args, Boolean waitForCallback) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 64
+   at PuppeteerSharp.Page.InitializeAsync() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 1215
+   at PuppeteerSharp.Page.CreateAsync(CDPSession client, Target target, Boolean ignoreHTTPSErrors, ViewPortOptions defaultViewPort, TaskQueue screenshotTaskQueue) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 1114
+   at PuppeteerSharp.Page.CreateAsync(CDPSession client, Target target, Boolean ignoreHTTPSErrors, ViewPortOptions defaultViewPort, TaskQueue screenshotTaskQueue) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 1126
+   at PuppeteerSharp.Target.CreatePageAsync() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Target.cs:line 184
+   at PuppeteerSharp.Browser.CreatePageInContextAsync(String contextId) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Browser.cs:line 331
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookies\SearchBot.cs:line 73
+2023-06-17 20:26:35.900 +08:00 [ERR] Произошла ошибка в методе Run PuppeteerSharp.NavigationException: Navigation failed because browser has disconnected! (The remote party closed the WebSocket connection without completing the close handshake.)
+ ---> PuppeteerSharp.TargetClosedException: Navigation failed because browser has disconnected! (The remote party closed the WebSocket connection without completing the close handshake.)
+   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 101
+   at PuppeteerSharp.FrameManager.NavigateFrameAsync(Frame frame, String url, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 84
+   --- End of inner exception stack trace ---
+   at PuppeteerSharp.FrameManager.NavigateFrameAsync(Frame frame, String url, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 88
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookies\SearchBot.cs:line 76
+2023-06-17 20:34:53.619 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.NavigationException: Protocol error (Page.navigate): Session closed. Most likely the Page has been closed.Close reason: Connection failed to process Runtime.executionContextCreated. Frame 3C0367A9D3F0D7E4A2BCDDBF6FE29285 not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
    at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
    at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
-   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236)
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 101
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.GoAsync(Int32 delta, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 1232
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 214
-2023-06-17 10:07:01.207 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.PuppeteerException: Protocol error (Page.reload): Session closed. Most likely the Page has been closed.Close reason: Connection failed to process Runtime.executionContextCreated. Frame 6A9014FDE5BFE905A976701D71A06EBC not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
+   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236
+ ---> PuppeteerSharp.PuppeteerException: Protocol error (Page.navigate): Session closed. Most likely the Page has been closed.Close reason: Connection failed to process Runtime.executionContextCreated. Frame 3C0367A9D3F0D7E4A2BCDDBF6FE29285 not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
    at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
    at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
    at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236
    at PuppeteerSharp.CDPSession.SendAsync(String method, Object args, Boolean waitForCallback) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 64
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 224
-2023-06-17 10:07:31.297 +08:00 [ERR] Ошибка в методе ClickRandomLink System.TimeoutException: Timeout of 30000 ms exceeded
-   at PuppeteerSharp.Helpers.TaskHelper.<>c__DisplayClass2_0.<WithTimeout>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 48
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 95
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 263
-2023-06-17 10:47:11.321 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.TargetClosedException: Navigation failed because browser has disconnected! (Connection failed to process Runtime.executionContextCreated. Frame 5B9B7F4EAFB5C178317831EF40FCB22C not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
-   at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
-   at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
-   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236)
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 101
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.GoAsync(Int32 delta, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 1232
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 214
-2023-06-17 10:47:12.308 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.PuppeteerException: Protocol error (Page.reload): Session closed. Most likely the Page has been closed.Close reason: Connection failed to process Runtime.executionContextCreated. Frame 5B9B7F4EAFB5C178317831EF40FCB22C not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
-   at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
-   at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
-   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236
-   at PuppeteerSharp.CDPSession.SendAsync(String method, Object args, Boolean waitForCallback) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 64
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 224
-2023-06-17 10:47:42.386 +08:00 [ERR] Ошибка в методе ClickRandomLink System.TimeoutException: Timeout of 30000 ms exceeded
-   at PuppeteerSharp.Helpers.TaskHelper.<>c__DisplayClass2_0.<WithTimeout>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 48
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 95
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 263
-2023-06-17 10:50:14.201 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.TargetClosedException: Navigation failed because browser has disconnected! (Connection failed to process Runtime.executionContextCreated. Frame 512392FD570EC1CC4DC83AA55218F9A9 not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
-   at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
-   at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
-   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236)
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 101
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.GoAsync(Int32 delta, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 1232
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 214
-2023-06-17 10:50:15.276 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.PuppeteerException: Protocol error (Page.reload): Session closed. Most likely the Page has been closed.Close reason: Connection failed to process Runtime.executionContextCreated. Frame 512392FD570EC1CC4DC83AA55218F9A9 not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
-   at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
-   at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
-   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236
-   at PuppeteerSharp.CDPSession.SendAsync(String method, Object args, Boolean waitForCallback) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 64
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 224
-2023-06-17 10:50:46.001 +08:00 [ERR] Ошибка в методе ClickRandomLink System.TimeoutException: Timeout of 30000 ms exceeded
-   at PuppeteerSharp.Helpers.TaskHelper.<>c__DisplayClass2_0.<WithTimeout>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 48
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 95
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 263
-2023-06-17 10:58:41.186 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.TargetClosedException: Navigation failed because browser has disconnected! (Connection failed to process Runtime.executionContextCreated. Frame A52FCB6444FE9BA0E433CB229D4AEC39 not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
-   at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
-   at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
-   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236)
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 101
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.GoAsync(Int32 delta, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 1232
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 214
-2023-06-17 10:58:42.229 +08:00 [ERR] Ошибка в методе ClickRandomLink PuppeteerSharp.PuppeteerException: Protocol error (Page.reload): Session closed. Most likely the Page has been closed.Close reason: Connection failed to process Runtime.executionContextCreated. Frame A52FCB6444FE9BA0E433CB229D4AEC39 not found.    at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.<>c__DisplayClass4_0.<GetItemAsync>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/AsyncDictionaryHelper.cs:line 34
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout[T](Task`1 task, Action timeoutAction, TimeSpan timeout) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 141
-   at PuppeteerSharp.Helpers.AsyncDictionaryHelper`2.GetItemAsync(TKey key)
-   at PuppeteerSharp.FrameManager.OnExecutionContextCreatedAsync(ContextPayload contextPayload, CDPSession session) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 315
-   at PuppeteerSharp.FrameManager.<>c__DisplayClass53_0.<<Client_MessageReceived>b__0>d.MoveNext() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 236
-   at PuppeteerSharp.CDPSession.SendAsync(String method, Object args, Boolean waitForCallback) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 64
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 224
-2023-06-17 10:59:12.321 +08:00 [ERR] Ошибка в методе ClickRandomLink System.TimeoutException: Timeout of 30000 ms exceeded
-   at PuppeteerSharp.Helpers.TaskHelper.<>c__DisplayClass2_0.<WithTimeout>b__0() in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 48
-   at PuppeteerSharp.Helpers.TaskHelper.WithTimeout(Task task, Func`1 timeoutAction, TimeSpan timeout, CancellationToken cancellationToken) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Helpers/TaskHelper.cs:line 95
-   at PuppeteerSharp.FrameManager.WaitForFrameNavigationAsync(Frame frame, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 105
-   at PuppeteerSharp.Page.ReloadAsync(NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/Page.cs:line 751
-   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 263
+   at PuppeteerSharp.CDPSession.SendAsync[T](String method, Object args) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/CDPSession.cs:line 55
+   at PuppeteerSharp.FrameManager.NavigateAsync(CDPSession client, String url, String referrer, String frameId) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 188
+   at PuppeteerSharp.FrameManager.NavigateFrameAsync(Frame frame, String url, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 78
+   --- End of inner exception stack trace ---
+   at PuppeteerSharp.FrameManager.NavigateFrameAsync(Frame frame, String url, NavigationOptions options) in /home/runner/work/puppeteer-sharp/puppeteer-sharp/lib/PuppeteerSharp/FrameManager.cs:line 88
+   at SearchBot.ClickRandomLink(IPage page) in E:\projects\HotCookies\SearchBot.cs:line 260
+2023-06-17 21:35:52.447 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:36:00.088 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78

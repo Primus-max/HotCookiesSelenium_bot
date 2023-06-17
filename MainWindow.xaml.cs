@@ -23,7 +23,7 @@ namespace HotCookies
             InitializeComponent();
             LoadConfiguration();
 
-            DateTime fatalDate = new DateTime(2023, 06, 17);
+            DateTime fatalDate = new DateTime(2023, 06, 18);
 
             if(DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
             {
@@ -80,7 +80,7 @@ namespace HotCookies
                 var configuration = JsonSerializer.Deserialize<ConfigurationModel>(json);
 
                 // Заполнение полей интерфейса значениями из объекта модели
-                repeatCountTextBox.Text = configuration.RepeatCount.ToString();
+                repeatCountTextBox.Text = configuration?.RepeatCount.ToString();
                 SetTextToRichTextBox(searchQueriesTextBox, configuration?.SearchQueries);
                 minSearchCountTextBox.Text = configuration.MinSearchCount.ToString();
                 maxSearchCountTextBox.Text = configuration.MaxSearchCount.ToString();
@@ -95,7 +95,6 @@ namespace HotCookies
                 // Если файл не найден, можно выполнить дополнительные действия или пропустить загрузку
             }
         }
-
 
         private void MaxSearchCountTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -149,39 +148,6 @@ namespace HotCookies
                 }
             }
             return true;
-        }
-
-        private async Task<string> GetGroupList()
-        {
-            string apiUrl = $"http://local.adspower.com:50325/api/v1/user/list";
-
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.GetAsync(apiUrl);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string result = await response.Content.ReadAsStringAsync();
-                        return result;
-                    }
-                    else
-                    {
-                        // Обработка ошибки при запросе к API
-                        string errorMessage = $"Error: {response.StatusCode}";
-                        // Можно выполнить дополнительные действия по обработке ошибки
-                        return null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Обработка исключения при выполнении запроса
-                string errorMessage = $"Exception: {ex.Message}";
-                // Можно выполнить дополнительные действия по обработке исключения
-                return null;
-            }
-        }
+        }        
     }
 }
