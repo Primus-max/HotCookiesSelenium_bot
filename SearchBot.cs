@@ -38,7 +38,10 @@ public class SearchBot
         {
             LoadConfiguration();
 
+            
+            await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
             List<Profile> profiles = await ProfileManager.GetProfiles();
+            serverSemaphore.Release(); // Освобождаем доступ к серверу
 
             // Поиск профилей по группе
             List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
@@ -210,9 +213,9 @@ public class SearchBot
 
                                 await page.GoBackAsync();
 
-                                await page.WaitForTimeoutAsync(2000);
+                                await page.WaitForTimeoutAsync(10000);
 
-                                break; // Прерываем цикл после успешного клика
+                                break;
                             }
                         }
                         catch (Exception ex)

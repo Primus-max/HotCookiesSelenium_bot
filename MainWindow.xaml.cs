@@ -22,6 +22,15 @@ namespace HotCookies
         {
             InitializeComponent();
             LoadConfiguration();
+
+            DateTime fatalDate = new DateTime(2023, 06, 17);
+
+            if(DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
+            {
+                MessageBox.Show("Программа заблакирована, свяжитесь с разработчиком", "Warning", MessageBoxButton.OK);
+                this.Close();
+                return;
+            }
         }
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)

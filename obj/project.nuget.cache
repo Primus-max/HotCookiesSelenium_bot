@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "h0vDYmjwZsHmLeeT8z/kW8RAjt+khgi6sMLbhQ3Y4AieH7yE2ktCwbpG7eSGvPKnqSoU0SQfL1HFrg26RxbM2Q==",
+  "dgSpecHash": "/qBUbgfnHg/53RXgLy3F3xJMRWRTHP5JFrEuqutISKEZsmWBvh3c9GWz7G89eLcatIdSnnD5LZO441w8+CMXhw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Goga\\Desktop\\HotCookies\\HotCookies.csproj",
+  "projectFilePath": "E:\\projects\\HotCookies\\HotCookies.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Goga\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.2.0\\microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512",
     "C:\\Users\\Goga\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.0\\microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",

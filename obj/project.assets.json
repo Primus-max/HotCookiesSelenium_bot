@@ -682,11 +682,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Goga\\Desktop\\HotCookies\\HotCookies.csproj",
+      "projectUniqueName": "E:\\projects\\HotCookies\\HotCookies.csproj",
       "projectName": "HotCookies",
-      "projectPath": "C:\\Users\\Goga\\Desktop\\HotCookies\\HotCookies.csproj",
+      "projectPath": "E:\\projects\\HotCookies\\HotCookies.csproj",
       "packagesPath": "C:\\Users\\Goga\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Goga\\Desktop\\HotCookies\\obj\\",
+      "outputPath": "E:\\projects\\HotCookies\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
