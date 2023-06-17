@@ -60,3 +60,146 @@ Object name: 'System.Net.Http.HttpClient'.
    at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
    at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
    at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:46:30.021 +08:00 [ERR] Ошибка в методе PerformSearch OpenQA.Selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"css selector","selector":"input[name='q']"}
+  (Session info: chrome=112.0.5615.138); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.FindElement(String mechanism, String value)
+   at OpenQA.Selenium.By.<.ctor>b__11_0(ISearchContext context)
+   at OpenQA.Selenium.By.FindElement(ISearchContext context)
+   at OpenQA.Selenium.WebDriver.FindElement(By by)
+   at SearchBot.PerformSearch(IWebDriver driver, String searchQuery) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 137
+2023-06-17 21:47:22.660 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:54:02.052 +08:00 [ERR] Произошла ошибка в методе Run OpenQA.Selenium.WebDriverException: Cannot start the driver service on http://localhost:55462/
+   at OpenQA.Selenium.DriverService.Start()
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.StartSession(ICapabilities desiredCapabilities)
+   at OpenQA.Selenium.WebDriver..ctor(ICommandExecutor executor, ICapabilities capabilities)
+   at OpenQA.Selenium.Chromium.ChromiumDriver..ctor(ChromiumDriverService service, ChromiumOptions options, TimeSpan commandTimeout)
+   at OpenQA.Selenium.Chrome.ChromeDriver..ctor(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout)
+   at OpenQA.Selenium.Chrome.ChromeDriver..ctor(ChromeOptions options)
+   at BrowserManager.ConnectBrowserAsync(String profileId) in E:\projects\HotCookiesSelenuim\BrowserManager.cs:line 51
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 64
+2023-06-17 21:54:51.846 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:56:12.573 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:56:27.714 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:57:40.619 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:58:31.910 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:58:39.295 +08:00 [ERR] Произошла ошибка в методе Run System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'System.Net.Http.HttpClient'.
+   at System.Net.Http.HttpClient.CheckDisposed()
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScriptInternal(IWebDriver driver, String script, Object[] args)
+   at OpenQA.Selenium.Support.Extensions.WebDriverExtensions.ExecuteJavaScript(IWebDriver driver, String script, Object[] args)
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 78
+2023-06-17 21:59:07.207 +08:00 [ERR] Ошибка в методе PerformSearch OpenQA.Selenium.NoSuchWindowException: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=112.0.5615.138)
+   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.FindElement(String mechanism, String value)
+   at OpenQA.Selenium.By.<.ctor>b__11_0(ISearchContext context)
+   at OpenQA.Selenium.By.FindElement(ISearchContext context)
+   at OpenQA.Selenium.WebDriver.FindElement(By by)
+   at SearchBot.PerformSearch(IWebDriver driver, String searchQuery) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 136
+2023-06-17 21:59:07.382 +08:00 [ERR] Произошла ошибка в методе Run OpenQA.Selenium.WebDriverException: disconnected: not connected to DevTools
+  (failed to check if window was closed: disconnected: not connected to DevTools)
+  (Session info: chrome=112.0.5615.138)
+   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.get_WindowHandles()
+   at SearchBot.CloseBrowser(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 119
+   at SearchBot.<>c__DisplayClass5_0.<<Run>b__1>d.MoveNext() in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 89

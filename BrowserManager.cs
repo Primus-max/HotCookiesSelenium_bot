@@ -45,6 +45,7 @@ public class BrowserManager
         }
 
         var options = new ChromeOptions();
+        options.AddArgument("--silent");
         options.DebuggerAddress = remoteAddressWithSelenium;
 
         var driver = new ChromeDriver(options);

@@ -81,15 +81,14 @@ public class SearchBot
                             driver.SwitchTo().Window(driver.WindowHandles.Last());
 
                             // Перейти на сайт google.com
-                            driver.Url = "https://www.youtube.com";
+                            driver.Url = "https://www.google.com";
 
-                            //await PerformSearch(driver, GetRandomSearchQuery());
-                            //await SpendRandomTime();
-                            //await ClickRandomLink(driver);
+                            var searchTask = PerformSearch(driver, GetRandomSearchQuery());
+                            var closeTask = CloseBrowser(driver);
 
-                            await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием страницы
-                            await CloseBrowser(driver);
-                            serverSemaphore.Release(); // Освобождаем доступ к серверу
+                            await Task.WhenAll(searchTask, closeTask);
+
+                            //serverSemaphore.Release(); // Освобождаем доступ к серверу
                         }
 
                         await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием браузера
@@ -130,50 +129,49 @@ public class SearchBot
         driver.Quit();
     }
 
+    private async Task PerformSearch(IWebDriver driver, string searchQuery)
+    {
+        try
+        {
+            var searchInput = driver.FindElement(By.CssSelector("input[name='q']"));
+            searchInput.SendKeys(Keys.End);
 
-    //private async Task PerformSearch(IWebDriver page, string searchQuery)
-    //{
-    //    try
-    //    {
-    //        await page.WaitForSelectorAsync("input[name='q']");
-    //        await page.FocusAsync("input[name='q']");
-    //        await page.Keyboard.PressAsync("End");
+            var inputValue = searchInput.GetAttribute("value");
+            for (int i = 0; i < inputValue.Length; i++)
+            {
+                try
+                {
+                    searchInput.SendKeys(Keys.Backspace);
 
-    //        var inputValue = await page.EvaluateExpressionAsync<string>("document.querySelector('input[name=\"q\"]').value");
-    //        for (int i = 0; i < inputValue.Length; i++)
-    //        {
-    //            try
-    //            {
-    //                await page.Keyboard.PressAsync("Backspace");
+                    Random randomDelay = new Random();
+                    int typeDelay = randomDelay.Next(200, 700);
+                    await Task.Delay(typeDelay);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"Ошибка в методе PerformSearch {ex}");
+                }
+            }
 
-    //                Random randomDelay = new Random();
-    //                int typeDelay = randomDelay.Next(200, 700);
-    //                await page.WaitForTimeoutAsync(typeDelay);
-    //            }
-    //            catch (Exception ex)
-    //            {                    
-    //                logger.Error($"Ошибка в методе PerformSearch {ex}");                    
-    //            }
-    //        }
+            try
+            {
+                searchInput.SendKeys(searchQuery);
+                searchInput.SendKeys(Keys.Enter);
+                await Task.Delay(2000);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Ошибка в методе PerformSearch {ex}");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
+            logger.Error($"Ошибка в методе PerformSearch {ex}");
+            // Логирование ошибки или предпринятие других действий по обработке ошибки
+        }
+    }
 
-    //        try
-    //        {
-    //            await page.TypeAsync("input[name='q']", searchQuery);
-    //            await page.Keyboard.PressAsync("Enter");
-    //            await page.WaitForTimeoutAsync(2000);
-    //        }
-    //        catch (Exception ex)
-    //        {                
-    //            logger.Error($"Ошибка в методе PerformSearch {ex}");
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
-    //        logger.Error($"Ошибка в методе PerformSearch {ex}");
-    //        // Логирование ошибки или предпринятие других действий по обработке ошибки
-    //    }
-    //}
 
     private async Task ClickRandomLink(IPage page)
     {
