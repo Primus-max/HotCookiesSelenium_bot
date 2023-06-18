@@ -45,10 +45,22 @@ public class BrowserManager
         }
 
         var options = new ChromeOptions();
-        options.AddArgument("--silent");
+        options.AddArguments(
+            "start-maximized",
+            "enable-automation",
+            "--headless",
+            "--no-sandbox", //this is the relevant other arguments came from solving other issues
+            "--disable-infobars",
+            "--disable-dev-shm-usage",
+            "--disable-browser-side-navigation",
+            "--disable-gpu",
+            "--ignore-certificate-errors");
+       //var capability = options.ToCapabilities();
+
         options.DebuggerAddress = remoteAddressWithSelenium;
 
-        var driver = new ChromeDriver(options);
+        var driver = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(5));
+        driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromMinutes(5));
         return driver;
     }
 }

@@ -23,7 +23,7 @@ namespace HotCookies
             InitializeComponent();
             LoadConfiguration();
 
-            DateTime fatalDate = new DateTime(2023, 06, 18);
+            DateTime fatalDate = new DateTime(2023, 06, 19);
 
             if(DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
             {
