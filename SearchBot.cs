@@ -22,119 +22,74 @@ public class SearchBot
 
     private static readonly ILogger logger = Log.ForContext<SearchBot>();
 
-
-    // Настройка логгера
-
-    public async Task Run()
+    public async Task Run(Profile profile)
     {
-        SetupLogger();
-
         try
         {
+            SetupLogger();
             LoadConfiguration();
 
             await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
-            List<Profile> profiles = await ProfileManager.GetProfiles();
+            var driver = await BrowserManager.ConnectBrowserAsync(profile.UserId);
             serverSemaphore.Release(); // Освобождаем доступ к серверу
 
-            // Поиск профилей по группе
-            List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
-            if (selectedProfiles.Count == 0)
+            if (driver == null)
             {
                 return;
             }
 
-            List<Task> tasks = new List<Task>();
+            var random = new Random();
+            int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
 
-            foreach (Profile profile in selectedProfiles)
+            for (int i = 0; i < randomVisitCount; i++)
             {
-                tasks.Add(Task.Run(async () =>
+                try
                 {
-                    try
+                    // Открыть новую вкладку
+                    driver.ExecuteJavaScript("window.open();");
+
+                    // Получить список открытых вкладок
+                    var openTabs = driver.WindowHandles;
+
+                    // Проверить, есть ли более одной открытой вкладки
+                    if (openTabs.Count > 1)
                     {
-                        if (profile is null) return;
-
-                        await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
-                        var driver = await BrowserManager.ConnectBrowserAsync(profile.UserId);
-
-                        serverSemaphore.Release(); // Освобождаем доступ к серверу
-
-                        if (driver == null)
+                        // Закрыть все вкладки, кроме первой
+                        for (int j = openTabs.Count - 1; j > 0; j--)
                         {
-                            return;
+                            driver.SwitchTo().Window(openTabs[j]);
+                            driver.Close();
+                            await Task.Delay(500);
                         }
 
-                        var random = new Random();
-                        int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
-
-                        for (int i = 0; i < randomVisitCount; i++)
-                        {
-                            try
-                            {
-                                // Открыть новую вкладку
-                                driver.ExecuteJavaScript("window.open();");
-
-                                // Получить список открытых вкладок
-                                var openTabs = driver.WindowHandles;
-
-                                // Проверить, есть ли более одной открытой вкладки
-                                if (openTabs.Count > 1)
-                                {
-                                    // Закрыть все вкладки, кроме первой
-                                    for (int j = openTabs.Count - 1; j > 0; j--)
-                                    {
-                                        driver.SwitchTo().Window(openTabs[j]);
-                                        driver.Close();
-                                    }
-
-                                    // Переключиться обратно на первую вкладку
-                                    driver.SwitchTo().Window(openTabs[0]);
-                                }
-
-                                // Переключиться на новую вкладку
-                                driver.SwitchTo().Window(driver.WindowHandles.Last());
-
-                                // Перейти на сайт google.com
-                                driver.Url = "https://www.google.com";
-                            }
-                            catch (Exception ex)
-                            {
-                                logger.Error($"Произошла ошибка в методе Run {ex}");
-                                continue;
-                            }
-
-                            var searchTask = PerformSearch(driver, GetRandomSearchQuery());
-                            await SpendRandomTime();
-                            await ClickRandomLink(driver);
-
-
-                            var closeTask = CloseBrowser(driver);
-
-                            await Task.WhenAll(searchTask, closeTask);
-
-                            //serverSemaphore.Release(); // Освобождаем доступ к серверу
-                        }
-
-                        await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу перед закрытием браузера
-                        driver.Quit();
-                        serverSemaphore.Release(); // Освобождаем доступ к серверу
-                        return;
+                        // Переключиться обратно на первую вкладку
+                        driver.SwitchTo().Window(openTabs[0]);
                     }
-                    catch (Exception ex)
-                    {
-                        logger.Error($"Произошла ошибка в методе Run {ex}");
-                        return;
-                        // Обработка ошибок
-                    }
-                }));
+
+                    // Переключиться на новую вкладку
+                    driver.SwitchTo().Window(driver.WindowHandles.Last());
+
+                    // Перейти на сайт google.com
+                    driver.Url = "https://www.google.com";
+                }
+                catch (Exception ex)
+                {
+                    logger.Error($"Произошла ошибка в методе Run {ex}");
+                    continue;
+                }
+
+                await PerformSearch(driver, GetRandomSearchQuery());
+                await SpendRandomTime();
+                await ClickRandomLink(driver);
             }
 
-            await Task.WhenAll(tasks);
+            await CloseBrowser(driver);
+            await Task.Delay(3000);
         }
         catch (Exception ex)
         {
             // Обработка ошибок
-            logger.Error($"Произошла ошибка в методе Run {ex}");
+            logger.Error($"Произошла ошибка в методе Run {ex}");             
         }
     }
 
@@ -161,7 +116,7 @@ public class SearchBot
         }
     }
 
-    private async Task PerformSearch(IWebDriver driver, string searchQuery)
+    private static async Task PerformSearch(IWebDriver driver, string searchQuery)
     {
         try
         {
@@ -182,6 +137,7 @@ public class SearchBot
                 catch (Exception ex)
                 {
                     logger.Error($"Ошибка в методе PerformSearch {ex}");
+                    continue;
                 }
             }
 
@@ -194,20 +150,20 @@ public class SearchBot
             catch (Exception ex)
             {
                 logger.Error($"Ошибка в методе PerformSearch {ex}");
+                return;
             }
         }
         catch (Exception ex)
         {
             // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
             logger.Error($"Ошибка в методе PerformSearch {ex}");
-            // Логирование ошибки или предпринятие других действий по обработке ошибки
+            return;
         }
     }
 
 
     private async Task ClickRandomLink(IWebDriver driver)
     {
-
         try
         {
             var clickedLinks = new List<string>();
@@ -220,7 +176,7 @@ public class SearchBot
                     var linkElements = driver.FindElements(By.CssSelector(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr"));
                     if (linkElements.Count == 0)
                     {
-                        //await PerformSearch(page, GetRandomSearchQuery());
+                        await PerformSearch(driver, GetRandomSearchQuery());
                     }
 
                     foreach (var linkElement in linkElements)
@@ -251,7 +207,7 @@ public class SearchBot
                                 scrollToY(y, duration);
                             }", linkElement);
 
-                                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+                                
 
                                 try
                                 {
@@ -266,7 +222,15 @@ public class SearchBot
                                 }
                                 catch (Exception ex)
                                 {
-                                    string asdf = ex.ToString();
+                                    string textEx = ex.ToString();
+                                    if(textEx.Contains("timed out after"))
+                                    {
+                                        logger.Error($"Ошибка в методе ClickRandomLink {ex}");
+                                        await CloseBrowser(driver);
+                                        return;
+                                    }
+                                    logger.Error($"Ошибка в методе ClickRandomLink {ex}");
+                                    continue;
                                 }
 
 
@@ -276,7 +240,7 @@ public class SearchBot
 
                                 driver.Navigate().Back();
 
-                                await Task.Delay(20000);
+                                await Task.Delay(5000);
 
                                 break;
                             }
@@ -375,6 +339,7 @@ public class SearchBot
         {
             // Обработка ошибок, возникающих при выполнении операций внутри метода SimulateUserBehavior
             logger.Error($"Ошибка в методе SimulateUserBehavior {ex}");
+            return;
         }
     }
 
@@ -436,6 +401,7 @@ public class SearchBot
         catch (Exception ex)
         {
             logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
+            return;
         }
     }
 

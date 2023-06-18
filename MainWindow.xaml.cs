@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -75,11 +76,41 @@ namespace HotCookies
                 // Дополнительные действия при ошибке записи файла
             }
 
+            //await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
+            List<Profile> profiles = await ProfileManager.GetProfiles();
+            //serverSemaphore.Release(); // Освобождаем доступ к серверу
+
+            // Поиск профилей по группе
+            List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
+
+            //List<Task> tasks = new List<Task>();
+            int batchSize = 3;
+            int profileIndex = 0;
+
+
             for (int i = 0; i < repeatCount; i++)
             {
-                SearchBot searchBot = new SearchBot();
-                await searchBot.Run();
+                profileIndex = 0;
+
+                while (profileIndex < selectedProfiles.Count)
+                {
+                    List<Profile> batchProfiles = selectedProfiles
+                        .Skip(profileIndex)
+                        .Take(batchSize)
+                        .ToList();
+
+                    var tasks = batchProfiles.Select(profile => Task.Run(async () =>
+                    {
+                        SearchBot searchBot = new SearchBot();
+                        await searchBot.Run(profile);
+                    })).ToList();
+
+                    await Task.WhenAll(tasks);
+
+                    profileIndex += batchSize;
+                }
             }
+
         }
 
 
