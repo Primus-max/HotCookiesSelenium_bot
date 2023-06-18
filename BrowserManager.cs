@@ -27,12 +27,12 @@ public class BrowserManager
             return null;
         }
 
-        string status = string.Empty;
-        string remoteAddressWithSelenium = string.Empty;
+        string? status = string.Empty;
+        string? remoteAddressWithSelenium = string.Empty;
         try
         {
-            status = (string)responseDataJson["msg"];
-            remoteAddressWithSelenium = (string)responseDataJson?["data"]?["ws"]?["selenium"];
+            status = (string?)responseDataJson["msg"];
+            remoteAddressWithSelenium = (string?)responseDataJson?["data"]?["ws"]?["selenium"];
         }
         catch (Exception)
         {

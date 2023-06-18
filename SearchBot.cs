@@ -17,8 +17,7 @@ public class SearchBot
 {
     private static readonly Random random = new Random();
 
-    private ConfigurationModel? configuration;
-    Browser browser = null;
+    private ConfigurationModel? configuration;    
     private static readonly SemaphoreSlim serverSemaphore = new SemaphoreSlim(1, 1);
 
     private static readonly ILogger logger = Log.ForContext<SearchBot>();
@@ -115,18 +114,25 @@ public class SearchBot
 
     private async Task CloseBrowser(IWebDriver driver)
     {
-        // Получаем список идентификаторов всех открытых вкладок
-        var windowHandles = driver.WindowHandles;
-
-        // Закрываем каждую вкладку
-        foreach (var windowHandle in windowHandles)
+        try
         {
-            driver.SwitchTo().Window(windowHandle);
-            driver.Close();
-        }
+            // Получаем список идентификаторов всех открытых вкладок
+            var windowHandles = driver.WindowHandles;
 
-        // Закрываем драйвер
-        driver.Quit();
+            // Закрываем каждую вкладку
+            foreach (var windowHandle in windowHandles)
+            {
+                driver.SwitchTo().Window(windowHandle);
+                driver.Close();
+            }
+
+            // Закрываем драйвер
+            driver.Quit();
+        }
+        catch (Exception ex)
+        {
+            logger.Error($"Произошла ошибка в методе CloseBrowser {ex}");
+        }
     }
 
     private async Task PerformSearch(IWebDriver driver, string searchQuery)
