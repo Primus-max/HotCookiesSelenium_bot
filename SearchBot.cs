@@ -74,6 +74,23 @@ public class SearchBot
                                 // Открыть новую вкладку
                                 driver.ExecuteJavaScript("window.open();");
 
+                                // Получить список открытых вкладок
+                                var openTabs = driver.WindowHandles;
+
+                                // Проверить, есть ли более одной открытой вкладки
+                                if (openTabs.Count > 1)
+                                {
+                                    // Закрыть все вкладки, кроме первой
+                                    for (int j = openTabs.Count - 1; j > 0; j--)
+                                    {
+                                        driver.SwitchTo().Window(openTabs[j]);
+                                        driver.Close();
+                                    }
+
+                                    // Переключиться обратно на первую вкладку
+                                    driver.SwitchTo().Window(openTabs[0]);
+                                }
+
                                 // Переключиться на новую вкладку
                                 driver.SwitchTo().Window(driver.WindowHandles.Last());
 
@@ -106,6 +123,7 @@ public class SearchBot
                     catch (Exception ex)
                     {
                         logger.Error($"Произошла ошибка в методе Run {ex}");
+                        return;
                         // Обработка ошибок
                     }
                 }));
@@ -420,7 +438,6 @@ public class SearchBot
             logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
         }
     }
-
 
     private enum ScrollDirection
     {
