@@ -69,14 +69,22 @@ public class SearchBot
 
                         for (int i = 0; i < randomVisitCount; i++)
                         {
-                            // Открыть новую вкладку
-                            driver.ExecuteJavaScript("window.open();");
+                            try
+                            {
+                                // Открыть новую вкладку
+                                driver.ExecuteJavaScript("window.open();");
 
-                            // Переключиться на новую вкладку
-                            driver.SwitchTo().Window(driver.WindowHandles.Last());
+                                // Переключиться на новую вкладку
+                                driver.SwitchTo().Window(driver.WindowHandles.Last());
 
-                            // Перейти на сайт google.com
-                            driver.Url = "https://www.google.com";
+                                // Перейти на сайт google.com
+                                driver.Url = "https://www.google.com";
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.Error($"Произошла ошибка в методе Run {ex}");
+                                continue;
+                            }
 
                             var searchTask = PerformSearch(driver, GetRandomSearchQuery());
                             await SpendRandomTime();
@@ -112,7 +120,7 @@ public class SearchBot
         }
     }
 
-    private async Task CloseBrowser(IWebDriver driver)
+    private static async Task CloseBrowser(IWebDriver driver)
     {
         try
         {
