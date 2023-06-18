@@ -27,7 +27,7 @@ namespace HotCookies
 
             if(DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
             {
-                MessageBox.Show("Программа заблакирована, свяжитесь с разработчиком", "Warning", MessageBoxButton.OK);
+                MessageBox.Show("Программа заблокирована, свяжитесь с разработчиком", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.Close();
                 return;
             }
@@ -35,8 +35,8 @@ namespace HotCookies
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
-            bool IsCkeckMaxValue = CheckMaxCountSerachQuery();
-            if (!IsCkeckMaxValue) return;
+            bool isCheckMaxValue = CheckMaxCountSerachQuery();
+            if (!isCheckMaxValue) return;
 
             // Создание объекта модели и заполнение его данными из полей интерфейса
             var configuration = new ConfigurationModel
@@ -52,21 +52,36 @@ namespace HotCookies
                 ProfileGroupName = profileGroupNameTextBox.Text
             };
 
+            // Попытка преобразования числовых значений
+            if (!int.TryParse(repeatCountTextBox.Text, out int repeatCount))
+            {
+                Console.WriteLine("Некорректное значение в repeatCountTextBox");
+                return;
+            }
+            // Продолжите преобразование значений для остальных полей
+
             // Сериализация объекта модели в JSON-строку
             string json = JsonSerializer.Serialize(configuration);
 
-            // Запись JSON-строки в файл
-            File.WriteAllText("config.json", json);
+            try
+            {
+                // Запись JSON-строки в файл
+                File.WriteAllText("config.json", json);
+            }
+            catch (Exception ex)
+            {
+                // Обработка исключения при записи файла
+                Console.WriteLine("Ошибка при записи файла: " + ex.Message);
+                // Дополнительные действия при ошибке записи файла
+            }
 
-
-            int repeatCount = int.Parse(repeatCountTextBox.Text);
             for (int i = 0; i < repeatCount; i++)
             {
                 SearchBot searchBot = new SearchBot();
                 await searchBot.Run();
             }
-
         }
+
 
         // Загружаю и устанавливаю в поля конфигурационные данные
         private void LoadConfiguration()

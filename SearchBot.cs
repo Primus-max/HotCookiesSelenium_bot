@@ -1,9 +1,6 @@
 ﻿using HotCookies;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using PuppeteerSharp;
@@ -15,9 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 public class SearchBot
 {
@@ -62,7 +56,7 @@ public class SearchBot
                         if (profile is null) return;
 
                         await serverSemaphore.WaitAsync(); // Ожидаем доступ к серверу
-                        var driver = await BrowserManager.ConnectBrowserAsync(profile.UserId);                        
+                        var driver = await BrowserManager.ConnectBrowserAsync(profile.UserId);
 
                         serverSemaphore.Release(); // Освобождаем доступ к серверу
 
@@ -180,7 +174,7 @@ public class SearchBot
 
 
     private async Task ClickRandomLink(IWebDriver driver)
-    {     
+    {
 
         try
         {
@@ -190,7 +184,7 @@ public class SearchBot
             while (clickedLinks.Count < maxSiteVisitCount)
             {
                 try
-                {                   
+                {
                     var linkElements = driver.FindElements(By.CssSelector(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr"));
                     if (linkElements.Count == 0)
                     {
@@ -242,7 +236,7 @@ public class SearchBot
                                 {
                                     string asdf = ex.ToString();
                                 }
-                                                                
+
 
                                 clickedLinks.Add(linkText);
 
@@ -441,7 +435,7 @@ public class SearchBot
         {
             string[] queries = configuration.SearchQueries?.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
             if (queries.Length == 0)
-            {                
+            {
                 return string.Empty;
             }
 
@@ -449,9 +443,9 @@ public class SearchBot
             return queries[randomIndex];
         }
         catch (Exception ex)
-        {           
-            logger.Error($"Ошибка в методе GetRandomSearchQuery {ex}");            
-            return string.Empty; 
+        {
+            logger.Error($"Ошибка в методе GetRandomSearchQuery {ex}");
+            return string.Empty;
         }
     }
 
