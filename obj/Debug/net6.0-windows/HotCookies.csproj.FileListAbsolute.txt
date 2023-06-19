@@ -143,3 +143,7 @@ E:\projects\HotCookiesSelenuim\obj\Debug\net6.0-windows\refint\HotCookies.dll
 E:\projects\HotCookiesSelenuim\obj\Debug\net6.0-windows\HotCookies.pdb
 E:\projects\HotCookiesSelenuim\obj\Debug\net6.0-windows\HotCookies.genruntimeconfig.cache
 E:\projects\HotCookiesSelenuim\obj\Debug\net6.0-windows\ref\HotCookies.dll
+E:\projects\HotCookiesSelenuim\bin\Debug\net6.0-windows\MaterialDesignColors.dll
+E:\projects\HotCookiesSelenuim\bin\Debug\net6.0-windows\MaterialDesignThemes.Wpf.dll
+E:\projects\HotCookiesSelenuim\bin\Debug\net6.0-windows\Microsoft.Xaml.Behaviors.dll
+E:\projects\HotCookiesSelenuim\obj\Debug\net6.0-windows\App.baml

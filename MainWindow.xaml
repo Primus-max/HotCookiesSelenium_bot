@@ -5,9 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotCookies"
         mc:Ignorable="d"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
         Title="Прогреваем куки"
-        Height="600"
-        Width="600">
+        Height="620"
+        Width="600"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Border Padding="20">
             <StackPanel>
@@ -24,7 +35,7 @@
                     <TextBlock Text="Поисковые запросы. Новый запрос с новой строки."
                                Margin="0 0 0 10"/>
                     <RichTextBox x:Name="searchQueriesTextBox"
-                                 Height="240"
+                                 Height="220"
                                  VerticalScrollBarVisibility="Auto">
                         <RichTextBox.Resources>
                             <Style TargetType="Paragraph">
@@ -37,65 +48,88 @@
                 </StackPanel>
 
                 <!-- Поле для ввода рандомного выбора количества поисковых запросов -->
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" >
                     <TextBlock Text="Сколько запросов"
-                               Margin="0 0 10 0"/>
-                    <TextBlock Text="От:"/>
+                               Margin="0 0 10 0"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="От:"
+                               VerticalAlignment="Center"/>
                     <TextBox x:Name="minSearchCountTextBox"
                              MinWidth="40"
-                             Margin="5 0 0 0" />
+                             Margin="5 0 0 0" 
+                             VerticalAlignment="Center"/>
 
-                    <TextBlock Text="До:" Margin="20 0 0 0"/>
+                    <TextBlock Text="До:" 
+                               Margin="20 0 0 0"
+                               VerticalAlignment="Center"/>
                     <TextBox x:Name="maxSearchCountTextBox"
                              MinWidth="40"
                              Margin="5 0 0 0"
-                             LostFocus="MaxSearchCountTextBox_LostFocus" />
+                             LostFocus="MaxSearchCountTextBox_LostFocus" 
+                             VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Поле для ввода рандомного выбора количества посещенных сайтов по одному запросу -->
                 <StackPanel Orientation="Horizontal"
                             Margin="0 20 0 0">
                     <TextBlock Text="Сколько посетить сайтов"
-                               Margin="0 0 10 0"/>
-                    <TextBlock Text="От:"/>
+                               Margin="0 0 10 0"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="От:"
+                               VerticalAlignment="Center"/>
                     <TextBox x:Name="minSiteVisitCountTextBox"
                              MinWidth="40"
-                             Margin="5 0 0 0" />
+                             Margin="5 0 0 0" 
+                             VerticalAlignment="Center"/>
 
-                    <TextBlock Text="До:" Margin="20 0 0 0"/>
+                    <TextBlock Text="До:" 
+                               Margin="20 0 0 0"
+                               VerticalAlignment="Center"/>
                     <TextBox x:Name="maxSiteVisitCountTextBox"
                              MinWidth="40"
-                             Margin="5 0 0 0" />
+                             Margin="5 0 0 0" 
+                             VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Поле для ввода рандомного выбора количества времени, проведенного на сайтах -->
                 <StackPanel Orientation="Horizontal"
-                            Margin="0 20 0 0">
+                            Margin="0 20 0 0"
+                            VerticalAlignment="Center">
                     <TextBlock Text="Сколько провести времени"
-                               Margin="0 0 10 0"/>
-                    <TextBlock Text="От:"/>
+                               Margin="0 0 10 0"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="От:"
+                               VerticalAlignment="Center"/>
                     <TextBox x:Name="minTimeSpentTextBox"
                              MinWidth="20"
-                             Margin="5 0 0 0" />
+                             Margin="5 0 0 0" 
+                             VerticalAlignment="Center"/>
                     <TextBlock Text="сек"
-                               Margin="5 0 0 0"/>
+                               Margin="5 0 0 0"
+                               VerticalAlignment="Center"/>
 
                     <TextBlock Text="До:"
-                               Margin="20 0 0 0"/>
+                               Margin="20 0 0 0"
+                               VerticalAlignment="Center"/>
                     <TextBox x:Name="maxTimeSpentTextBox"
                              MinWidth="20"
-                             Margin="5 0 0 0" />
+                             Margin="5 0 0 0" 
+                             VerticalAlignment="Center"/>
                     <TextBlock Text="сек"
-                               Margin="5 0 0 0"/>
+                               Margin="5 0 0 0"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Поле для ввода имени группы профилей -->
                 <StackPanel Orientation="Horizontal"
-                            Margin="0 20 0 0">
-                    <TextBlock Text="Имя группы профилей:"/>
+                            Margin="0 20 0 0"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="Имя группы профилей:"
+                               VerticalAlignment="Center"/>
                     <TextBox x:Name="profileGroupNameTextBox"
                              MinWidth="160"
-                             Margin="40 0 0 0"/>
+                             Margin="40 0 0 0"
+                             VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <Button
