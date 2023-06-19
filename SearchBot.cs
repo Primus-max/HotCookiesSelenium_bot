@@ -18,7 +18,7 @@ public class SearchBot
 {
     private static readonly Random random = new Random();
 
-    private ConfigurationModel? configuration;    
+    private ConfigurationModel? configuration;
     private static readonly SemaphoreSlim serverSemaphore = new SemaphoreSlim(1, 1);
 
     private static readonly ILogger logger = Log.ForContext<SearchBot>();
@@ -38,45 +38,45 @@ public class SearchBot
             {
                 return;
             }
-                       
-                try
+
+            try
+            {
+                // Открыть новую вкладку
+                driver.ExecuteJavaScript("window.open();");
+
+                // Получить список открытых вкладок
+                var openTabs = driver.WindowHandles;
+
+                // Проверить, есть ли более одной открытой вкладки
+                if (openTabs.Count > 1)
                 {
-                    // Открыть новую вкладку
-                    driver.ExecuteJavaScript("window.open();");
-
-                    // Получить список открытых вкладок
-                    var openTabs = driver.WindowHandles;
-
-                    // Проверить, есть ли более одной открытой вкладки
-                    if (openTabs.Count > 1)
+                    // Закрыть все вкладки, кроме первой
+                    for (int j = openTabs.Count - 1; j > 0; j--)
                     {
-                        // Закрыть все вкладки, кроме первой
-                        for (int j = openTabs.Count - 1; j > 0; j--)
-                        {
-                            driver.SwitchTo().Window(openTabs[j]);
-                            driver.Close();
-                            await Task.Delay(500);
-                        }
-
-                        // Переключиться обратно на первую вкладку
-                        driver.SwitchTo().Window(openTabs[0]);
+                        driver.SwitchTo().Window(openTabs[j]);
+                        driver.Close();
+                        await Task.Delay(500);
                     }
 
-                    // Переключиться на новую вкладку
-                    driver.SwitchTo().Window(driver.WindowHandles.Last());
-
-                    // Перейти на сайт google.com
-                    driver.Url = "https://www.google.com";
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"Произошла ошибка в методе Run {ex}");
+                    // Переключиться обратно на первую вкладку
+                    driver.SwitchTo().Window(openTabs[0]);
                 }
 
-                await PerformSearch(driver, GetRandomSearchQuery());
-                await SpendRandomTime();
-                await ClickRandomLink(driver);
-           
+                // Переключиться на новую вкладку
+                driver.SwitchTo().Window(driver.WindowHandles.Last());
+
+                // Перейти на сайт google.com
+                driver.Url = "https://www.google.com";
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Произошла ошибка в методе Run {ex}");
+            }
+
+            await PerformSearch(driver, GetRandomSearchQuery());
+            await SpendRandomTime();
+            await ClickRandomLink(driver);
+
 
             await CloseBrowser(driver);
             await Task.Delay(3000);
@@ -84,12 +84,22 @@ public class SearchBot
         catch (Exception ex)
         {
             // Обработка ошибок
-            logger.Error($"Произошла ошибка в методе Run {ex}");             
+            logger.Error($"Произошла ошибка в методе Run {ex}");
         }
     }
 
     private static async Task CloseBrowser(IWebDriver driver)
     {
+        try
+        {
+            // Перейти на сайт google.com
+            driver.Url = "https://www.google.com";
+        }
+        catch (Exception ex)
+        {
+            logger.Error($"Перед закрытием не удалось перейти на google.com {ex}");
+        }
+
         try
         {
             // Получаем список идентификаторов всех открытых вкладок
@@ -100,6 +110,7 @@ public class SearchBot
             {
                 driver.SwitchTo().Window(windowHandle);
                 driver.Close();
+                await Task.Delay(500);
             }
 
             // Закрываем драйвер
@@ -161,7 +172,7 @@ public class SearchBot
         try
         {
             var clickedLinks = new List<string>();
-            
+
             var randomSite = new Random();
             int randomVisitCount = randomSite.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
 

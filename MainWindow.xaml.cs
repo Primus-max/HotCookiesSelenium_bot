@@ -26,7 +26,7 @@ namespace HotCookies
 
             DateTime fatalDate = new DateTime(2023, 06, 20);
 
-            if(DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
+            if (DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
             {
                 MessageBox.Show("Программа заблокирована, свяжитесь с разработчиком", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.Close();
@@ -115,9 +115,7 @@ namespace HotCookies
 
                     profileIndex += batchSize;
                 }
-                MessageBox.Show("Первый круг");
             }
-            MessageBox.Show($"Промчал по всем {repeatCount} раз");
         }
 
 
@@ -201,6 +199,6 @@ namespace HotCookies
                 }
             }
             return true;
-        }        
+        }
     }
 }
