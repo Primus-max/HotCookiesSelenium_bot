@@ -1,6 +1,7 @@
 ﻿using HotCookies;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using PuppeteerSharp;
@@ -37,12 +38,7 @@ public class SearchBot
             {
                 return;
             }
-
-            var random = new Random();
-            int randomVisitCount = random.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
-
-            for (int i = 0; i < randomVisitCount; i++)
-            {
+                       
                 try
                 {
                     // Открыть новую вкладку
@@ -75,13 +71,12 @@ public class SearchBot
                 catch (Exception ex)
                 {
                     logger.Error($"Произошла ошибка в методе Run {ex}");
-                    continue;
                 }
 
                 await PerformSearch(driver, GetRandomSearchQuery());
                 await SpendRandomTime();
                 await ClickRandomLink(driver);
-            }
+           
 
             await CloseBrowser(driver);
             await Task.Delay(3000);
@@ -161,15 +156,16 @@ public class SearchBot
         }
     }
 
-
     private async Task ClickRandomLink(IWebDriver driver)
     {
         try
         {
             var clickedLinks = new List<string>();
-            int maxSiteVisitCount = configuration.MaxSiteVisitCount;
+            
+            var randomSite = new Random();
+            int randomVisitCount = randomSite.Next(configuration.MinSiteVisitCount, configuration.MaxSiteVisitCount);
 
-            while (clickedLinks.Count < maxSiteVisitCount)
+            while (clickedLinks.Count < randomVisitCount)
             {
                 try
                 {
@@ -179,105 +175,74 @@ public class SearchBot
                         await PerformSearch(driver, GetRandomSearchQuery());
                     }
 
-                    foreach (var linkElement in linkElements)
+                    if (linkElements.Count > 0)
                     {
-                        try
-                        {
-                            var linkText = linkElement.Text;
+                        var random = new Random();
+                        var randomIndex = random.Next(0, linkElements.Count);
+                        var linkElement = linkElements[randomIndex];
 
-                            if (!clickedLinks.Contains(linkText))
+                        string? textLink = linkElement.Text;
+
+                        if (!clickedLinks.Contains(textLink))
+                        {
+                            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", linkElement);
+                            await Task.Delay(3000);
+
+                            try
                             {
-                                ((IJavaScriptExecutor)driver).ExecuteScript(@"(element) => {
-                                const y = element.getBoundingClientRect().top + window.pageYOffset;
-                                const duration = 1000; // Длительность анимации в миллисекундах
-                                const increment = 20; // Шаг прокрутки за один кадр
-
-                                const scrollToY = (to, duration) => {
-                                    if (duration <= 0) return;
-                                    const difference = to - window.pageYOffset;
-                                    const perTick = difference / duration * increment;
-
-                                    setTimeout(() => {
-                                        window.scrollBy(0, perTick);
-                                        if (window.pageYOffset === to) return;
-                                        scrollToY(to, duration - increment);
-                                    }, increment);
-                                }
-
-                                scrollToY(y, duration);
-                            }", linkElement);
-
-                                
-
-                                try
-                                {
-                                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromMinutes(5));
-                                    wait.Until(driver =>
-                                    {
-                                        IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
-                                        jsExecutor.ExecuteScript("arguments[0].click();", linkElement);
-                                        return true;
-                                    });
-                                    //linkElement.Click();
-                                }
-                                catch (Exception ex)
-                                {
-                                    string textEx = ex.ToString();
-                                    if(textEx.Contains("timed out after"))
-                                    {
-                                        logger.Error($"Ошибка в методе ClickRandomLink {ex}");
-                                        await CloseBrowser(driver);
-                                        return;
-                                    }
-                                    logger.Error($"Ошибка в методе ClickRandomLink {ex}");
-                                    continue;
-                                }
-
-
-                                clickedLinks.Add(linkText);
-
-                                await SimulateUserBehavior(driver);
-
-                                driver.Navigate().Back();
-
-                                await Task.Delay(5000);
-
-                                break;
+                                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", linkElement);
+                                clickedLinks.Add(textLink);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.Error($"Ошибка в методе ClickRandomLink {ex}");
-                            return;
+                            catch (Exception ex)
+                            {
+                                string textEx = ex.ToString();
+                                if (textEx.Contains("timed out after"))
+                                {
+                                    logger.Error($"Ошибка в методе ClickRandomLink {ex}");
+                                    await CloseBrowser(driver);
+                                    return;
+                                }
+                                logger.Error($"Ошибка в методе ClickRandomLink {ex}");
+                                continue;
+                            }
+
+                            await SimulateUserBehavior(driver);
+
+                            driver.Navigate().Back();
+
+                            await Task.Delay(3000);
+
                         }
                     }
 
                     // Если все ссылки уже были посещены, прокручиваем страницу
                     if (clickedLinks.Count == linkElements.Count)
                     {
-                        ((IJavaScriptExecutor)driver).ExecuteScript(@"() => {
-                        const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
-                        const clientHeight = document.documentElement.clientHeight;
-                        const duration = 3000; // Длительность анимации в миллисекундах
-                        const increment = 20; // Шаг прокрутки за один кадр
+                        int initialUniqueLinksCount = clickedLinks.Count;
+                        int scrollHeight = (int)((IJavaScriptExecutor)driver).ExecuteScript("return Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);");
+                        int clientHeight = (int)((IJavaScriptExecutor)driver).ExecuteScript("return document.documentElement.clientHeight;");
+                        int duration = 3000; // Длительность анимации в миллисекундах
+                        int increment = 20; // Шаг прокрутки за один кадр
 
-                        const scrollToBottom = (duration) => {
-                            if (duration <= 0) return;
-                            const difference = scrollHeight - window.pageYOffset - clientHeight;
-                            const perTick = difference / duration * increment;
+                        int currentHeight = (int)((IJavaScriptExecutor)driver).ExecuteScript("return window.pageYOffset;");
+                        int maxHeight = currentHeight + clientHeight;
 
-                            setTimeout(() => {
-                                window.scrollBy(0, perTick);
-                                if (window.pageYOffset + clientHeight === scrollHeight) return;
-                                scrollToBottom(duration - increment);
-                            }, increment);
+                        while (currentHeight < scrollHeight)
+                        {
+                            ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0, arguments[0]);", increment);
+                            await Task.Delay(duration / (scrollHeight / increment));
+                            currentHeight = (int)((IJavaScriptExecutor)driver).ExecuteScript("return window.pageYOffset;");
+
+                            if (currentHeight + clientHeight > maxHeight)
+                            {
+                                maxHeight = currentHeight + clientHeight;
+                                initialUniqueLinksCount = clickedLinks.Count; // Обновляем начальное количество уникальных ссылок
+                            }
+                            else if (clickedLinks.Count == initialUniqueLinksCount)
+                            {
+                                break; // Не было загружено новых элементов, выходим из цикла
+                            }
                         }
-
-                        scrollToBottom(duration);
-                    }");
-
-                        // Ждем, пока страница прокрутится и новые элементы загрузятся
-                        await Task.Delay(3000);
                     }
                 }
                 catch (Exception ex)
@@ -286,6 +251,7 @@ public class SearchBot
                     continue;
                 }
             }
+
         }
         catch (Exception ex)
         {
@@ -298,7 +264,7 @@ public class SearchBot
     {
         try
         {
-            await Task.Delay(20000);
+            await Task.Delay(5000);
 
             int minTimeSpent = configuration.MinTimeSpent;
             int maxTimeSpent = configuration.MaxTimeSpent;
@@ -430,8 +396,8 @@ public class SearchBot
     {
         try
         {
-            string[] queries = configuration.SearchQueries?.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            if (queries.Length == 0)
+            string[]? queries = configuration?.SearchQueries?.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (queries?.Length == 0)
             {
                 return string.Empty;
             }

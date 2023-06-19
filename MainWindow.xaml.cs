@@ -24,7 +24,7 @@ namespace HotCookies
             InitializeComponent();
             LoadConfiguration();
 
-            DateTime fatalDate = new DateTime(2023, 06, 19);
+            DateTime fatalDate = new DateTime(2023, 06, 20);
 
             if(DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
             {
@@ -83,6 +83,12 @@ namespace HotCookies
             // Поиск профилей по группе
             List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
 
+            foreach (var profile in selectedProfiles)
+            {
+                SearchBot searchBot = new SearchBot();
+                await searchBot.Run(profile);
+            }
+            MessageBox.Show("Первый круг");
             //List<Task> tasks = new List<Task>();
             int batchSize = 3;
             int profileIndex = 0;
@@ -109,8 +115,9 @@ namespace HotCookies
 
                     profileIndex += batchSize;
                 }
+                MessageBox.Show("Первый круг");
             }
-
+            MessageBox.Show($"Промчал по всем {repeatCount} раз");
         }
 
 
