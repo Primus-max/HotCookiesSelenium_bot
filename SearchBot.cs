@@ -320,47 +320,38 @@ public class SearchBot
 
             var scrollStep = 150;
 
-            // Задержка между прокруткой
+            int minTimeSpent = configuration.MinTimeSpent;
+            int maxTimeSpent = configuration.MaxTimeSpent;
 
-            if (direction == ScrollDirection.Down)
+            var randomTime = new Random().Next(minTimeSpent, maxTimeSpent + 1) * 1000; // Преобразуем время в миллисекунды
+            var endTime = DateTime.UtcNow.AddMilliseconds(randomTime);
+
+            while (DateTime.UtcNow < endTime)
             {
-                while (currentScroll + windowHeight < scrollHeight)
+                if (direction == ScrollDirection.Down && currentScroll + windowHeight >= scrollHeight)
                 {
-                    try
-                    {
-                        currentScroll += scrollStep;
-                        jsExecutor.ExecuteScript($"window.scrollBy(0, {scrollStep});");
-
-                        Random randomDelay = new Random();
-                        int scrollDelay = randomDelay.Next(200, 1000);
-                        await Task.Delay(scrollDelay);
-                    }
-                    catch (Exception ex)
-                    {
-                        // Обработка ошибок, возникающих при прокрутке страницы вниз
-                        logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
-                        continue;
-                    }
+                    break; // Достигнут нижний конец страницы, прекращаем прокрутку вниз
                 }
-            }
-            else if (direction == ScrollDirection.Up)
-            {
-                while (currentScroll > 0)
-                {
-                    try
-                    {
-                        currentScroll -= scrollStep;
-                        jsExecutor.ExecuteScript($"window.scrollBy(0, -{scrollStep});");
 
-                        Random randomDelay = new Random();
-                        int scrollDelay = randomDelay.Next(200, 1000);
-                        await Task.Delay(scrollDelay);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
-                        continue;
-                    }
+                if (direction == ScrollDirection.Up && currentScroll <= 0)
+                {
+                    break; // Достигнут верхний конец страницы, прекращаем прокрутку вверх
+                }
+
+                try
+                {
+                    currentScroll += (direction == ScrollDirection.Down) ? scrollStep : -scrollStep;
+                    jsExecutor.ExecuteScript($"window.scrollBy(0, {(direction == ScrollDirection.Down ? scrollStep : -scrollStep)});");
+
+                    Random randomDelay = new Random();
+                    int scrollDelay = randomDelay.Next(200, 1000);
+                    await Task.Delay(scrollDelay);
+                }
+                catch (Exception ex)
+                {
+                    // Обработка ошибок, возникающих при прокрутке страницы
+                    logger.Error($"Ошибка в методе ScrollPageSmoothly {ex}");
+                    continue;
                 }
             }
         }
@@ -370,6 +361,7 @@ public class SearchBot
             return;
         }
     }
+
 
     private enum ScrollDirection
     {
