@@ -83,12 +83,12 @@ namespace HotCookies
             // Поиск профилей по группе
             List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
 
-            foreach (var profile in selectedProfiles)
-            {
-                SearchBot searchBot = new SearchBot();
-                await searchBot.Run(profile);
-            }
-            MessageBox.Show("Первый круг");
+            //foreach (var profile in selectedProfiles)
+            //{
+            //    SearchBot searchBot = new SearchBot();
+            //    await searchBot.Run(profile);
+            //}
+            //MessageBox.Show("Первый круг");
             //List<Task> tasks = new List<Task>();
             int batchSize = 3;
             int profileIndex = 0;

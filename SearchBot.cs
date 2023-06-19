@@ -172,6 +172,33 @@ public class SearchBot
                     var linkElements = driver.FindElements(By.CssSelector(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr"));
                     if (linkElements.Count == 0)
                     {
+                        // Открыть новую вкладку
+                        driver.ExecuteJavaScript("window.open();");
+
+                        // Получить список открытых вкладок
+                        var openTabs = driver.WindowHandles;
+
+                        // Проверить, есть ли более одной открытой вкладки
+                        if (openTabs.Count > 1)
+                        {
+                            // Закрыть все вкладки, кроме первой
+                            for (int j = openTabs.Count - 1; j > 0; j--)
+                            {
+                                driver.SwitchTo().Window(openTabs[j]);
+                                driver.Close();
+                                await Task.Delay(500);
+                            }
+
+                            // Переключиться обратно на первую вкладку
+                            driver.SwitchTo().Window(openTabs[0]);
+                        }
+
+                        // Переключиться на новую вкладку
+                        driver.SwitchTo().Window(driver.WindowHandles.Last());
+
+                        // Перейти на сайт google.com
+                        driver.Url = "https://www.google.com";
+
                         await PerformSearch(driver, GetRandomSearchQuery());
                     }
 
