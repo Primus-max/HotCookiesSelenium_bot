@@ -24,7 +24,7 @@ namespace HotCookies
             InitializeComponent();
             LoadConfiguration();
 
-            DateTime fatalDate = new DateTime(2023, 06, 20);
+            DateTime fatalDate = new DateTime(2023, 06, 21);
 
             if (DateTime.Equals(fatalDate.Date, DateTime.Now.Date))
             {
@@ -117,7 +117,6 @@ namespace HotCookies
                 }
             }
         }
-
 
         // Загружаю и устанавливаю в поля конфигурационные данные
         private void LoadConfiguration()
