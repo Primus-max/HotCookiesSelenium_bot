@@ -33,6 +33,7 @@ public class BrowserManager
         {
             status = (string?)responseDataJson["msg"];
             remoteAddressWithSelenium = (string?)responseDataJson?["data"]?["ws"]?["selenium"];
+            string webdriverPath = (string?)responseDataJson?["data"]?["webdriver"];
         }
         catch (Exception)
         {
@@ -55,7 +56,7 @@ public class BrowserManager
             "--disable-browser-side-navigation",
             "--disable-gpu",
             "--ignore-certificate-errors");
-       //var capability = options.ToCapabilities();
+        //var capability = options.ToCapabilities();
 
         options.DebuggerAddress = remoteAddressWithSelenium;
 
