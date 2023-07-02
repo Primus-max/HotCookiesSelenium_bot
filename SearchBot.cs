@@ -347,7 +347,7 @@ public class SearchBot
         Thread.Sleep(random.Next(300, 700));
     }
 
-    private async Task SimulateUserBehavior(IWebDriver driver)
+    private void SimulateUserBehavior(IWebDriver driver)
     {
         try
         {
