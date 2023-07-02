@@ -70,7 +70,20 @@ public class SearchBot
                 logger.Error($"Произошла ошибка в методе Run {ex}");
             }
 
-            await PerformSearch(driver, GetRandomSearchQuery());
+            //await PerformSearch(driver, GetRandomSearchQuery());
+
+            // Получаю input с поиском и вызываю метод для вставки рандомного текста в поиск
+            try
+            {
+                IWebElement searchInput = driver.FindElement(By.Id("APjFqb"));
+                ClearAndEnterText(searchInput, GetRandomSearchQuery());
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             await SpendRandomTime();
             await ClickRandomLink(driver);
 
@@ -123,7 +136,8 @@ public class SearchBot
     {
         try
         {
-            var searchInput = driver.FindElement(By.CssSelector("input[name='q']"));
+            var searchInput = driver.FindElement(By.Id("APjFqb"));
+            // var searchInput = driver.FindElement(By.CssSelector("input[name='q']"));
             searchInput.SendKeys(Keys.End);
 
             var inputValue = searchInput.GetAttribute("value");
@@ -207,7 +221,19 @@ public class SearchBot
                         // Перейти на сайт google.com
                         driver.Url = "https://www.google.com";
 
-                        await PerformSearch(driver, GetRandomSearchQuery());
+                        //await PerformSearch(driver, GetRandomSearchQuery());
+
+                        // Получаю input с поиском и вызываю метод для вставки рандомного текста в поиск
+                        try
+                        {
+                            IWebElement searchInput = driver.FindElement(By.Id("APjFqb"));
+                            ClearAndEnterText(searchInput, GetRandomSearchQuery());
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
                     }
 
                     if (linkElements.Count > 0)
@@ -293,6 +319,32 @@ public class SearchBot
             logger.Error($"Ошибка в методе ClickRandomLink {ex}");
             return;
         }
+    }
+
+
+    private static void ClearAndEnterText(IWebElement element, string text)
+    {
+        Random random = new Random();
+
+        // Вводим текст по одному символу
+        foreach (char letter in text)
+        {
+            if (letter == '\b')
+            {
+                // Если символ является символом backspace, удаляем последний введенный символ
+                element.SendKeys(Keys.Backspace);
+            }
+            else
+            {
+                // Вводим символ
+                element.SendKeys(letter.ToString());
+            }
+
+            Thread.Sleep(random.Next(50, 150));  // Добавляем небольшую паузу между вводом каждого символа
+        }
+
+        element.Submit();
+        Thread.Sleep(random.Next(300, 700));
     }
 
     private async Task SimulateUserBehavior(IWebDriver driver)

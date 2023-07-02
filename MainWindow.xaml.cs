@@ -80,39 +80,39 @@ namespace HotCookies
             // Поиск профилей по группе
             List<Profile> selectedProfiles = profiles.Where(p => p.GroupName == configuration?.ProfileGroupName).ToList();
 
-            //foreach (var profile in selectedProfiles)
-            //{
-            //    SearchBot searchBot = new SearchBot();
-            //    await searchBot.Run(profile);
-            //}
+            foreach (var profile in selectedProfiles)
+            {
+                SearchBot searchBot = new SearchBot();
+                await searchBot.Run(profile);
+            }
             //MessageBox.Show("Первый круг");
             //List<Task> tasks = new List<Task>();
             int batchSize = 3;
             int profileIndex = 0;
 
 
-            for (int i = 0; i < repeatCount; i++)
-            {
-                profileIndex = 0;
+            //for (int i = 0; i < repeatCount; i++)
+            //{
+            //    profileIndex = 0;
 
-                while (profileIndex < selectedProfiles.Count)
-                {
-                    List<Profile> batchProfiles = selectedProfiles
-                        .Skip(profileIndex)
-                        .Take(batchSize)
-                        .ToList();
+            //    while (profileIndex < selectedProfiles.Count)
+            //    {
+            //        List<Profile> batchProfiles = selectedProfiles
+            //            .Skip(profileIndex)
+            //            .Take(batchSize)
+            //            .ToList();
 
-                    var tasks = batchProfiles.Select(profile => Task.Run(async () =>
-                    {
-                        SearchBot searchBot = new SearchBot();
-                        await searchBot.Run(profile);
-                    })).ToList();
+            //        var tasks = batchProfiles.Select(profile => Task.Run(async () =>
+            //        {
+            //            SearchBot searchBot = new SearchBot();
+            //            await searchBot.Run(profile);
+            //        })).ToList();
 
-                    await Task.WhenAll(tasks);
+            //        await Task.WhenAll(tasks);
 
-                    profileIndex += batchSize;
-                }
-            }
+            //        profileIndex += batchSize;
+            //    }
+            //}
         }
 
         // Загружаю и устанавливаю в поля конфигурационные данные

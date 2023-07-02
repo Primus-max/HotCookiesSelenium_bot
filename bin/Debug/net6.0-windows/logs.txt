@@ -98,3 +98,61 @@
    at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 257
 2023-07-03 06:56:23.531 +08:00 [ERR] Ошибка в методе ClickRandomLink System.InvalidCastException: Unable to cast object of type 'System.Int64' to type 'System.Int32'.
    at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 257
+2023-07-03 07:25:24.891 +08:00 [ERR] Ошибка в методе ClickRandomLink System.InvalidCastException: Unable to cast object of type 'System.Int64' to type 'System.Int32'.
+   at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 258
+2023-07-03 07:25:34.129 +08:00 [ERR] Ошибка в методе ClickRandomLink OpenQA.Selenium.NoSuchWindowException: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=112.0.5615.138)
+   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.ExecuteScriptCommand(String script, String commandName, Object[] args)
+   at OpenQA.Selenium.WebDriver.ExecuteScript(String script, Object[] args)
+   at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 258
+2023-07-03 07:25:34.184 +08:00 [ERR] Ошибка в методе ClickRandomLink OpenQA.Selenium.NoSuchWindowException: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=112.0.5615.138)
+   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.FindElements(String mechanism, String value)
+   at OpenQA.Selenium.By.<.ctor>b__11_1(ISearchContext context)
+   at OpenQA.Selenium.By.FindElements(ISearchContext context)
+   at OpenQA.Selenium.WebDriver.FindElements(By by)
+   at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 181
+2023-07-03 07:25:34.276 +08:00 [ERR] Ошибка в методе ClickRandomLink OpenQA.Selenium.NoSuchWindowException: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=112.0.5615.138)
+   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.FindElements(String mechanism, String value)
+   at OpenQA.Selenium.By.<.ctor>b__11_1(ISearchContext context)
+   at OpenQA.Selenium.By.FindElements(ISearchContext context)
+   at OpenQA.Selenium.WebDriver.FindElements(By by)
+   at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 181
+2023-07-03 07:25:38.516 +08:00 [ERR] Ошибка в методе ClickRandomLink OpenQA.Selenium.WebDriverException: An unknown exception was encountered sending an HTTP request to the remote WebDriver server for URL http://localhost:49856/session/02529c2aac79eca3c0f6cf9d38d1fed5/elements. The exception message was: Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение. (localhost:49856)
+ ---> System.Net.Http.HttpRequestException: Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение. (localhost:49856)
+ ---> System.Net.Sockets.SocketException (10061): Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|277_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(HttpRequestMessage request)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.GetHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   --- End of inner exception stack trace ---
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.FindElements(String mechanism, String value)
+   at OpenQA.Selenium.By.<.ctor>b__11_1(ISearchContext context)
+   at OpenQA.Selenium.By.FindElements(ISearchContext context)
+   at OpenQA.Selenium.WebDriver.FindElements(By by)
+   at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 181
