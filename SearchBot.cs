@@ -85,7 +85,7 @@ public class SearchBot
             }
 
             await SpendRandomTime();
-            await ClickRandomLink(driver);
+            ClickRandomLink(driver);
 
 
             await CloseBrowser(driver);
@@ -178,7 +178,7 @@ public class SearchBot
         }
     }
 
-    private async Task ClickRandomLink(IWebDriver driver)
+    private void ClickRandomLink(IWebDriver driver)
     {
         try
         {
@@ -208,7 +208,7 @@ public class SearchBot
                             {
                                 driver.SwitchTo().Window(openTabs[j]);
                                 driver.Close();
-                                await Task.Delay(500);
+                                Thread.Sleep(500);
                             }
 
                             // Переключиться обратно на первую вкладку
@@ -247,7 +247,7 @@ public class SearchBot
                         if (!clickedLinks.Contains(textLink))
                         {
                             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", linkElement);
-                            await Task.Delay(3000);
+                            Thread.Sleep(3000);
 
                             try
                             {
@@ -260,18 +260,18 @@ public class SearchBot
                                 if (textEx.Contains("timed out after"))
                                 {
                                     logger.Error($"Ошибка в методе ClickRandomLink {ex}");
-                                    await CloseBrowser(driver);
+                                    CloseBrowser(driver);
                                     return;
                                 }
                                 logger.Error($"Ошибка в методе ClickRandomLink {ex}");
                                 continue;
                             }
 
-                            await SimulateUserBehavior(driver);
+                            SimulateUserBehavior(driver);
 
                             driver.Navigate().Back();
 
-                            await Task.Delay(3000);
+                            Thread.Sleep(3000);
 
                         }
                     }
@@ -291,7 +291,7 @@ public class SearchBot
                         while (currentHeight < scrollHeight)
                         {
                             ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0, arguments[0]);", increment);
-                            await Task.Delay(duration / (scrollHeight / increment));
+                            Thread.Sleep(duration / (scrollHeight / increment));
                             currentHeight = (int)((IJavaScriptExecutor)driver).ExecuteScript("return window.pageYOffset;");
 
                             if (currentHeight + clientHeight > maxHeight)
