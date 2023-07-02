@@ -5,6 +5,8 @@ using OpenQA.Selenium.Chrome;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System;
+using System.IO;
+using System.Windows;
 
 public class BrowserManager
 {
@@ -29,11 +31,12 @@ public class BrowserManager
 
         string? status = string.Empty;
         string? remoteAddressWithSelenium = string.Empty;
+        string? webdriverPath = string.Empty;
         try
         {
             status = (string?)responseDataJson["msg"];
             remoteAddressWithSelenium = (string?)responseDataJson?["data"]?["ws"]?["selenium"];
-            string webdriverPath = (string?)responseDataJson?["data"]?["webdriver"];
+            webdriverPath = (string?)responseDataJson?["data"]?["webdriver"];
         }
         catch (Exception)
         {
@@ -59,9 +62,12 @@ public class BrowserManager
         //var capability = options.ToCapabilities();
 
         options.DebuggerAddress = remoteAddressWithSelenium;
+        var service = ChromeDriverService.CreateDefaultService();
+        string? chromeDriverDirectory = Path.GetDirectoryName(webdriverPath);
+        service.DriverServicePath = chromeDriverDirectory;
+        service.DriverServiceExecutableName = "chromedriver.exe";
+        var driver = new ChromeDriver(service, options, TimeSpan.FromMinutes(5));
 
-        var driver = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(5));
-        driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromMinutes(5));
         return driver;
     }
 }
