@@ -98,7 +98,7 @@ public class SearchBot
         }
     }
 
-    private static async Task CloseBrowser(IWebDriver driver)
+    private static void CloseBrowser(IWebDriver driver)
     {
         try
         {
@@ -191,7 +191,9 @@ public class SearchBot
             {
                 try
                 {
-                    var linkElements = driver.FindElements(By.CssSelector(".yuRUbf"));
+                    IList<IWebElement> linkElements = driver.FindElements(By.CssSelector("a[jsname='qOiK6e']"));
+
+                    //var linkElements = driver.FindElements(By.CssSelector(".yuRUbf"));
                     if (linkElements.Count == 0)
                     {
                         // Открыть новую вкладку
@@ -252,7 +254,7 @@ public class SearchBot
                             try
                             {
                                 linkElement.Click();
-                                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", linkElement);
+                                // ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", linkElement);
                                 clickedLinks.Add(textLink);
                             }
                             catch (Exception ex)
