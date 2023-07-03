@@ -78,18 +78,14 @@ public class SearchBot
                 IWebElement searchInput = driver.FindElement(By.Id("APjFqb"));
                 ClearAndEnterText(searchInput, GetRandomSearchQuery());
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { }
 
             SpendRandomTime();
             ClickRandomLink(driver);
 
 
-            await CloseBrowser(driver);
-            await Task.Delay(3000);
+            CloseBrowser(driver);
+            Thread.Sleep(3000);
         }
         catch (Exception ex)
         {
@@ -120,7 +116,7 @@ public class SearchBot
             {
                 driver.SwitchTo().Window(windowHandle);
                 driver.Close();
-                await Task.Delay(500);
+                Thread.Sleep(500);
             }
 
             // Закрываем драйвер
@@ -129,52 +125,6 @@ public class SearchBot
         catch (Exception ex)
         {
             logger.Error($"Произошла ошибка в методе CloseBrowser {ex}");
-        }
-    }
-
-    private static async Task PerformSearch(IWebDriver driver, string searchQuery)
-    {
-        try
-        {
-            var searchInput = driver.FindElement(By.Id("APjFqb"));
-            // var searchInput = driver.FindElement(By.CssSelector("input[name='q']"));
-            searchInput.SendKeys(Keys.End);
-
-            var inputValue = searchInput.GetAttribute("value");
-            for (int i = 0; i < inputValue.Length; i++)
-            {
-                try
-                {
-                    searchInput.SendKeys(Keys.Backspace);
-
-                    Random randomDelay = new Random();
-                    int typeDelay = randomDelay.Next(200, 700);
-                    await Task.Delay(typeDelay);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error($"Ошибка в методе PerformSearch {ex}");
-                    continue;
-                }
-            }
-
-            try
-            {
-                searchInput.SendKeys(searchQuery);
-                searchInput.SendKeys(Keys.Enter);
-                await Task.Delay(2000);
-            }
-            catch (Exception ex)
-            {
-                logger.Error($"Ошибка в методе PerformSearch {ex}");
-                return;
-            }
-        }
-        catch (Exception ex)
-        {
-            // Обработка ошибок, возникающих при выполнении операций внутри метода PerformSearch
-            logger.Error($"Ошибка в методе PerformSearch {ex}");
-            return;
         }
     }
 
@@ -223,8 +173,6 @@ public class SearchBot
                         // Перейти на сайт google.com
                         driver.Url = "https://www.google.com";
 
-                        //await PerformSearch(driver, GetRandomSearchQuery());
-
                         // Получаю input с поиском и вызываю метод для вставки рандомного текста в поиск
                         try
                         {
@@ -244,7 +192,13 @@ public class SearchBot
                         var randomIndex = random.Next(0, linkElements.Count);
                         var linkElement = linkElements[randomIndex];
 
-                        string? textLink = linkElement.Text;
+                        string? textLink = string.Empty;
+
+                        try
+                        {
+                            textLink = linkElement.FindElement(By.CssSelector("h3.LC20lb.MBeuO.DKV0Md")).Text;
+                        }
+                        catch (Exception) { }
 
                         if (!clickedLinks.Contains(textLink))
                         {
