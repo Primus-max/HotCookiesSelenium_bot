@@ -84,7 +84,7 @@ public class SearchBot
                 throw;
             }
 
-            await SpendRandomTime();
+            SpendRandomTime();
             ClickRandomLink(driver);
 
 
@@ -191,7 +191,7 @@ public class SearchBot
             {
                 try
                 {
-                    var linkElements = driver.FindElements(By.CssSelector(".A9xod.ynAwRc.ClLRCd.q8U8x.MBeuO.oewGkc.LeUQr"));
+                    var linkElements = driver.FindElements(By.CssSelector(".yuRUbf"));
                     if (linkElements.Count == 0)
                     {
                         // Открыть новую вкладку
@@ -251,6 +251,7 @@ public class SearchBot
 
                             try
                             {
+                                linkElement.Click();
                                 ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", linkElement);
                                 clickedLinks.Add(textLink);
                             }
@@ -351,7 +352,7 @@ public class SearchBot
     {
         try
         {
-            await Task.Delay(5000);
+            Thread.Sleep(5000);
 
             int minTimeSpent = configuration.MinTimeSpent;
             int maxTimeSpent = configuration.MaxTimeSpent;
@@ -370,14 +371,14 @@ public class SearchBot
                     if (currentScroll + windowHeight >= scrollHeight)
                     {
                         // Достигнут нижний конец страницы, прокручиваем вверх
-                        await ScrollPageSmoothly(driver, ScrollDirection.Up);
-                        await Task.Delay(1000); // Добавляем небольшую задержку между прокрутками
+                        ScrollPageSmoothly(driver, ScrollDirection.Up);
+                        Thread.Sleep(1000); // Добавляем небольшую задержку между прокрутками
                     }
                     else
                     {
                         // Продолжаем прокручивать вниз
-                        await ScrollPageSmoothly(driver, ScrollDirection.Down);
-                        await Task.Delay(1500); // Добавляем небольшую задержку между прокрутками
+                        ScrollPageSmoothly(driver, ScrollDirection.Down);
+                        Thread.Sleep(1500); // Добавляем небольшую задержку между прокрутками
                     }
                 }
                 catch (Exception ex)
@@ -396,7 +397,7 @@ public class SearchBot
         }
     }
 
-    private async Task ScrollPageSmoothly(IWebDriver driver, ScrollDirection direction)
+    private void ScrollPageSmoothly(IWebDriver driver, ScrollDirection direction)
     {
         try
         {
@@ -432,7 +433,7 @@ public class SearchBot
 
                     Random randomDelay = new Random();
                     int scrollDelay = randomDelay.Next(200, 1000);
-                    await Task.Delay(scrollDelay);
+                    Thread.Sleep(scrollDelay);
                 }
                 catch (Exception ex)
                 {
@@ -491,12 +492,12 @@ public class SearchBot
         }
     }
 
-    private async Task SpendRandomTime()
+    private void SpendRandomTime()
     {
         try
         {
             int time = random.Next(configuration.MinTimeSpent, configuration.MaxTimeSpent + 1);
-            await Task.Delay(time * 1000);
+            Thread.Sleep(time * 1000);
         }
         catch (Exception ex)
         {
