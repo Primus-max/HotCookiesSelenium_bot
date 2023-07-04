@@ -70,18 +70,28 @@ public class SearchBot
                 logger.Error($"Произошла ошибка в методе Run {ex}");
             }
 
-            //await PerformSearch(driver, GetRandomSearchQuery());
+            // Рандомное количество поисковых запросов
+            int minSearchCount = configuration.MinSearchCount;
+            int maxSearchCount = configuration.MinSearchCount;
+            int curSearchcount = 0;
 
-            // Получаю input с поиском и вызываю метод для вставки рандомного текста в поиск
-            try
+            var randomSearchCount = new Random().Next(minSearchCount, maxSearchCount);
+
+
+            while (randomSearchCount != curSearchcount)
             {
-                IWebElement searchInput = driver.FindElement(By.Id("APjFqb"));
-                ClearAndEnterText(searchInput, GetRandomSearchQuery());
-            }
-            catch (Exception) { }
+                // Получаю input с поиском и вызываю метод для вставки рандомного текста в поиск
+                try
+                {
+                    IWebElement searchInput = driver.FindElement(By.Id("APjFqb"));
+                    ClearAndEnterText(searchInput, GetRandomSearchQuery());
+                }
+                catch (Exception) { }
 
-            SpendRandomTime();
-            ClickRandomLink(driver);
+                SpendRandomTime();
+                ClickRandomLink(driver);
+                curSearchcount++;
+            }
 
 
             CloseBrowser(driver);
@@ -277,7 +287,6 @@ public class SearchBot
             return;
         }
     }
-
 
     private static void ClearAndEnterText(IWebElement element, string text)
     {
