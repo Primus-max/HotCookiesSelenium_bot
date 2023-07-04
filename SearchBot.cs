@@ -292,13 +292,14 @@ public class SearchBot
     {
         Random random = new Random();
 
-        // Вводим текст по одному символу
+        element.Clear(); // Очищаем элемент перед вводом текста
+
         foreach (char letter in text)
         {
             if (letter == '\b')
             {
-                // Если символ является символом backspace, удаляем последний введенный символ
-                element.SendKeys(Keys.Backspace);
+                // Если символ является символом backspace, удаляем следующий символ
+                element.SendKeys(Keys.Delete);
             }
             else
             {
@@ -306,12 +307,13 @@ public class SearchBot
                 element.SendKeys(letter.ToString());
             }
 
-            Thread.Sleep(random.Next(50, 150));  // Добавляем небольшую паузу между вводом каждого символа
+            Thread.Sleep(random.Next(100, 350));  // Добавляем небольшую паузу между вводом каждого символа
         }
 
         element.Submit();
         Thread.Sleep(random.Next(300, 700));
     }
+
 
     private void SimulateUserBehavior(IWebDriver driver)
     {

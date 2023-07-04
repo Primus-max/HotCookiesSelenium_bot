@@ -1,0 +1,8 @@
+2023-07-04 20:07:09.431 +08:00 [ERR] Ошибка в методе ClickRandomLink OpenQA.Selenium.ElementNotInteractableException: element not interactable
+  (Session info: chrome=112.0.5615.138)
+   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebDriver.InternalExecute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebElement.Execute(String commandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.WebElement.Click()
+   at SearchBot.ClickRandomLink(IWebDriver driver) in E:\projects\HotCookiesSelenuim\SearchBot.cs:line 220
